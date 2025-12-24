@@ -1,5 +1,12 @@
-*
-!demo/
-!demo/**
-!widget/
-!widget/**
+# ============================================
+# repo/kaerez/cfcap/.wranglerignore
+# ============================================
+
+node_modules
+.git
+.github
+.wrangler
+.vscode
+.DS_Store
+dist
+worker
