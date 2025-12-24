@@ -8,7 +8,8 @@ file: public/index.html
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CFCap Demo</title>
-    <script src="/widget.js"></script>
+    <!-- Pointing to /widget/widget.js as requested -->
+    <script src="/widget/widget.js"></script>
     <style>
         body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; background: #f0f0f0; }
         .container { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center; }
@@ -29,36 +30,6 @@ file: public/index.html
 
     <p id="status" style="margin-top: 1rem; color: #666;">Completing CAPTCHA...</p>
 </div>
-
-<script>
-    // Wait for the widget to be ready (if needed) or just listen for the event
-    // The specific event name depends on @cap.js/widget documentation.
-    // Assuming it emits a standard event or uses a callback.
-    
-    // Example listener (adjust based on actual widget docs if different):
-    /*
-    document.addEventListener('cap-success', async (e) => {
-        const token = e.detail.token;
-        document.getElementById('status').innerText = "Verifying token...";
-        
-        // Verify with our backend
-        const res = await fetch('/api/validate', {
-            method: 'POST',
-            body: JSON.stringify({ token }),
-            headers: { 'Content-Type': 'application/json' }
-        });
-        const data = await res.json();
-        
-        if (data.success) {
-            document.getElementById('status').innerText = "Success! Verified.";
-            document.getElementById('status').style.color = "green";
-        } else {
-            document.getElementById('status').innerText = "Verification failed.";
-            document.getElementById('status').style.color = "red";
-        }
-    });
-    */
-</script>
 
 </body>
 </html>
