@@ -38,13 +38,14 @@ jobs:
           mkdir -p widget
           
           # 1. Download Main Widget
-          # Try dist first (standard), then root
-          URL_MAIN="https://cdn.jsdelivr.net/npm/@cap.js/widget@$VERSION/dist/widget.js"
+          # URL: https://cdn.jsdelivr.net/npm/@cap.js/widget@<version>
+          # Note: curl -L follows the redirect to the main entry file (e.g. /dist/widget.js)
+          URL_MAIN="https://cdn.jsdelivr.net/npm/@cap.js/widget@$VERSION"
           echo "Downloading Widget from $URL_MAIN..."
-          curl -L -f -o widget/widget.js "$URL_MAIN" || curl -L -f -o widget/widget.js "https://cdn.jsdelivr.net/npm/@cap.js/widget@$VERSION/widget.js"
+          curl -L -f -o widget/widget.js "$URL_MAIN"
 
           # 2. Download Floating Script
-          # User specified path: /cap-floating.min.js (Root of package usually)
+          # URL: https://cdn.jsdelivr.net/npm/@cap.js/widget@<version>/cap-floating.min.js
           URL_FLOAT="https://cdn.jsdelivr.net/npm/@cap.js/widget@$VERSION/cap-floating.min.js"
           echo "Downloading Floating Script from $URL_FLOAT..."
           curl -L -f -o widget/cap-floating.min.js "$URL_FLOAT"
