@@ -1,0 +1,9 @@
+{
+  "name": "cfcap-widget-tracker",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Tracks the version of @cap.js/widget for the GitHub Action",
+  "dependencies": {
+    "@cap.js/widget": "0.1.33"
+  }
+}
