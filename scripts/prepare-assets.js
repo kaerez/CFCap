@@ -9,7 +9,9 @@ const https = require('node:https');
 
 // Configuration
 const WIDGET_VERSION = '0.1.33';
-const TARGET_DIR = path.join(__dirname, '..', 'public', 'widget');
+// TARGET: root/widget/widget.js
+// We point to the root 'widget' folder, NOT public/widget
+const TARGET_DIR = path.join(__dirname, '..', 'widget');
 const TARGET_FILE = path.join(TARGET_DIR, 'widget.js');
 
 // Ensure target directory exists
@@ -17,35 +19,6 @@ if (!fs.existsSync(TARGET_DIR)) {
   fs.mkdirSync(TARGET_DIR, { recursive: true });
 }
 
-// Strategy 1: Try to find the browser build in node_modules
-const copyFromNodeModules = () => {
-  try {
-    const pkgPath = require.resolve('@cap.js/widget/package.json');
-    const pkgDir = path.dirname(pkgPath);
-    
-    // Common paths for browser bundles
-    const candidates = [
-      path.join(pkgDir, 'dist', 'widget.js'),
-      path.join(pkgDir, 'widget.js')
-    ];
-
-    for (const candidate of candidates) {
-      if (fs.existsSync(candidate)) {
-        console.log(`✅ Found local widget file: ${candidate}`);
-        fs.copyFileSync(candidate, TARGET_FILE);
-        console.log(`📄 Copied to ${TARGET_FILE}`);
-        return true;
-      }
-    }
-    console.log('⚠️  Could not locate specific browser build in node_modules.');
-    return false;
-  } catch (e) {
-    console.log('⚠️  Could not resolve @cap.js/widget locally:', e.message);
-    return false;
-  }
-};
-
-// Strategy 2: Download from CDN
 const downloadFromCDN = () => {
   const url = `https://cdn.jsdelivr.net/npm/@cap.js/widget@${WIDGET_VERSION}/dist/widget.js`; 
   const altUrl = `https://cdn.jsdelivr.net/npm/@cap.js/widget@${WIDGET_VERSION}/widget.js`;
@@ -82,14 +55,9 @@ const downloadFromCDN = () => {
 
 (async () => {
   try {
-    // Try download first to guarantee browser version
     await downloadFromCDN();
   } catch (err) {
     console.error('❌ Download failed:', err.message);
-    console.log('ℹ️  Attempting local copy...');
-    if (!copyFromNodeModules()) {
-      console.error('❌ Failed to prepare widget.js');
-      process.exit(1);
-    }
+    process.exit(1);
   }
 })();
