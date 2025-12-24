@@ -34,6 +34,9 @@ file: demo/landing.html
             --code-bg: #f6f8fa;
             --code-text: #24292f;
             --code-border: #d0d7de;
+            --copy-btn-bg: rgba(0, 0, 0, 0.08);
+            --copy-btn-hover: rgba(0, 0, 0, 0.15);
+            --copy-btn-text: #57606a;
             
             /* Syntax Highlighting Light */
             --token-tag: #116329;
@@ -63,6 +66,9 @@ file: demo/landing.html
             --code-bg: #0d1117;
             --code-text: #c9d1d9;
             --code-border: #30363d;
+            --copy-btn-bg: rgba(255, 255, 255, 0.1);
+            --copy-btn-hover: rgba(255, 255, 255, 0.2);
+            --copy-btn-text: #8b949e;
 
             /* Syntax Highlighting Dark */
             --token-tag: #7ee787;
@@ -171,7 +177,6 @@ file: demo/landing.html
             border: 1px solid var(--border-color);
             border-radius: 16px;
             overflow: hidden;
-            /* FIX: Remove fixed min-height to avoid empty space */
         }
 
         .demo-widget {
@@ -262,12 +267,27 @@ file: demo/landing.html
             position: relative;
         }
 
+        .copy-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: var(--copy-btn-bg);
+            border: none;
+            color: var(--copy-btn-text);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            z-index: 10;
+            font-weight: 600;
+        }
+        .copy-btn:hover { background: var(--copy-btn-hover); color: var(--text-primary); }
+
         /* FIX 3-6: Specific Styles for Demos */
         
-        /* Dark Theme Demo: Box needs dark background, Code needs global theme */
         .preview-dark { background: #1a1a1a !important; }
         
-        /* The widget itself needs to force variables */
         cap-widget.custom-dark {
             --cap-background: #111;
             --cap-border-color: #333;
@@ -276,14 +296,12 @@ file: demo/landing.html
             --cap-checkbox-background: #222;
         }
 
-        /* Hide Label: Force font-size 0 on the host */
         cap-widget.hide-label {
             --cap-font-size: 0px; 
             font-size: 0px !important;
             --cap-font: 0px/0px sans-serif;
         }
 
-        /* Replace Label Container */
         .replace-label-wrap {
             display: flex;
             align-items: center;
@@ -294,7 +312,6 @@ file: demo/landing.html
             border-radius: 12px;
         }
 
-        /* Kitchen Sink */
         cap-widget.custom-kitchen {
             --cap-border-radius: 0;
             --cap-color: #2cb67d;
@@ -314,7 +331,7 @@ file: demo/landing.html
             overflow-y: auto;
             display: flex;
             flex-direction: column-reverse;
-            word-break: break-all; /* FIX 7: Prevent crop */
+            word-break: break-all;
         }
 
         /* Syntax Classes */
@@ -362,7 +379,74 @@ file: demo/landing.html
         
         <div class="demo-container">
             <div class="demo-widget">
-                <cap-widget id="main-cap" data-cap-api-endpoint="/api/" data-cap-worker-count="4"></cap-widget>
+                <!-- SHADOW DOM TEMPLATE WITH STROBE EFFECT -->
+                <cap-widget id="main-cap" data-cap-api-endpoint="/api/" data-cap-worker-count="4">
+                    <template shadowrootmode="open">
+                        <style>
+                            .captcha{
+                                box-sizing: border-box;
+                                background-color: var(--cap-background, #fdfdfd);
+                                border: 1px solid var(--cap-border-color, #dddddd8f);
+                                border-radius: var(--cap-border-radius, 14px);
+                                user-select: none;
+                                height: var(--cap-widget-height, 58px);
+                                width: var(--cap-widget-width, 230px);
+                                display: flex;
+                                align-items: center;
+                                padding: var(--cap-widget-padding, 14px);
+                                gap: var(--cap-gap, 15px);
+                                cursor: pointer;
+                                position: relative;
+                                overflow: hidden;
+                                color: var(--cap-color, #212121);
+                                font-family: var(--cap-font, system-ui, sans-serif);
+                            }
+                            
+                            /* Strobe Effect for Verifying/Loading State */
+                            .captcha:not([data-state="done"])::after {
+                                content: "";
+                                position: absolute;
+                                top: 0; left: 0; width: 100%; height: 100%;
+                                background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.4) 50%, transparent 100%);
+                                animation: strobe 2.5s infinite linear;
+                                transform: translateX(-100%);
+                                pointer-events: none;
+                            }
+                            
+                            @keyframes strobe {
+                                0% { transform: translateX(-100%); }
+                                30% { transform: translateX(100%); }
+                                100% { transform: translateX(100%); }
+                            }
+
+                            .checkbox {
+                                width: var(--cap-checkbox-size, 25px);
+                                height: var(--cap-checkbox-size, 25px);
+                                border: var(--cap-checkbox-border, 1px solid #aaaaaad1);
+                                border-radius: var(--cap-checkbox-border-radius, 6px);
+                                background-color: var(--cap-checkbox-background, #fafafa91);
+                                display: flex; align-items: center; justify-content: center;
+                            }
+                            
+                            .captcha[data-state="done"] .checkbox {
+                                border-color: transparent;
+                                background: none;
+                            }
+                            
+                            .captcha p { margin: 0; font-weight: 500; font-size: 15px; }
+                            
+                            .credits {
+                                position: absolute; bottom: 6px; right: 10px;
+                                font-size: 10px; color: #999; text-decoration: none;
+                            }
+                        </style>
+                        <div class="captcha" part="container">
+                            <div class="checkbox" part="checkbox"></div>
+                            <p part="label">I'm a human</p>
+                            <a class="credits" href="#" target="_blank">CFCap</a>
+                        </div>
+                    </template>
+                </cap-widget>
                 <div id="demo-status" class="demo-status">Verify to continue</div>
             </div>
             <div class="demo-code">
@@ -377,6 +461,7 @@ file: demo/landing.html
   <span class="a">data-cap-api-endpoint</span>=<span class="s">"/api/"</span>
   <span class="a">data-cap-worker-count</span>=<span class="s">"4"</span>&gt;
 &lt;/<span class="t">cap-widget</span>&gt;</pre>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
                 </div>
                 <div class="code-content">
 <pre><span class="k">const</span> widget = document.querySelector(<span class="s">"cap-widget"</span>);
@@ -385,6 +470,7 @@ widget.addEventListener(<span class="s">"solve"</span>, <span class="k">async</s
   <span class="k">const</span> token = e.detail.token;
   <span class="c">// Verify with backend</span>
 });</pre>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
                 </div>
             </div>
         </div>
@@ -421,6 +507,7 @@ widget.addEventListener(<span class="s">"solve"</span>, <span class="k">async</s
   --cap-background: #111;
   --cap-color: #fff;
 }</pre>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
                 </div>
             </div>
 
@@ -435,6 +522,7 @@ widget.addEventListener(<span class="s">"solve"</span>, <span class="k">async</s
   --cap-font-size: 0px;
   /* Collapses text space */
 }</pre>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
                 </div>
             </div>
 
@@ -450,6 +538,7 @@ widget.addEventListener(<span class="s">"solve"</span>, <span class="k">async</s
                 <div class="code-box">
 <pre>.container { display: flex; ... }
 /* Hide label, add custom span */</pre>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
                 </div>
             </div>
 
@@ -464,6 +553,7 @@ widget.addEventListener(<span class="s">"solve"</span>, <span class="k">async</s
   --cap-border-radius: 0;
   --cap-color: #2cb67d;
 }</pre>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
                 </div>
             </div>
         </div>
@@ -481,10 +571,12 @@ widget.addEventListener(<span class="s">"solve"</span>, <span class="k">async</s
             <div class="code-box" style="border-radius:12px; border:1px solid var(--border-color);">
 <pre><span class="c">&lt;!-- Local --&gt;</span>
 &lt;script src="/widget/cap-floating.min.js"&gt;</pre>
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
             </div>
             <div class="code-box" style="border-radius:12px; border:1px solid var(--border-color);">
 <pre><span class="c">&lt;!-- CDN --&gt;</span>
 &lt;script src="https://cdn.../cap-floating.min.js"&gt;</pre>
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
             </div>
         </div>
 
@@ -514,6 +606,15 @@ widget.addEventListener(<span class="s">"solve"</span>, <span class="k">async</s
     window.setTab = (idx) => {
         document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', i===idx));
         document.querySelectorAll('.code-content').forEach((c,i) => c.classList.toggle('active', i===idx));
+    };
+
+    // Copy Code
+    window.copyCode = (btn) => {
+        const code = btn.parentElement.querySelector('pre').innerText;
+        navigator.clipboard.writeText(code);
+        const original = btn.innerText;
+        btn.innerText = "Copied!";
+        setTimeout(() => btn.innerText = original, 2000);
     };
 
     // Logic
