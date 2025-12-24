@@ -6,6 +6,7 @@
   "scripts": {
     "start": "wrangler dev",
     "prepare-assets": "node scripts/prepare-assets.js",
+    "build": "npm run prepare-assets",
     "predeploy": "npm run prepare-assets",
     "deploy": "npm run predeploy && wrangler deploy",
     "cf-typegen": "wrangler types"
