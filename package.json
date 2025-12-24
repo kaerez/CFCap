@@ -5,15 +5,16 @@
   "main": "src/index.js",
   "scripts": {
     "start": "wrangler dev",
-    "deploy": "wrangler deploy",
+    "predeploy": "node scripts/update-config.js",
+    "deploy": "npm run predeploy && wrangler deploy",
     "cf-typegen": "wrangler types"
   },
   "author": "Erez Kalman",
   "license": "Commercial",
   "dependencies": {
-    "@cap.js/server": "^1.0.0"
+    "@cap.js/server": "latest"
   },
   "devDependencies": {
-    "wrangler": "^3.0.0"
+    "wrangler": "latest"
   }
 }
