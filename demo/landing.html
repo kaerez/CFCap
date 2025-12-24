@@ -7,34 +7,217 @@ file: demo/landing.html
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CFCap Demo</title>
+    <title>CFCap Comprehensive Demo</title>
     
-    <!-- 
-      Points to /widget/widget.js.
-      This file exists in the repo at widget/widget.js
-    -->
+    <!-- LOCAL ASSETS -->
     <script src="/widget/widget.js" type="module"></script>
+    <script src="/widget/cap-floating.min.js"></script>
 
     <style>
-        body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; background: #f0f0f0; }
-        .container { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center; }
-        h1 { margin-bottom: 1.5rem; }
-        cap-widget { display: block; margin: 0 auto; }
+        :root {
+            --bg-color: #f4f6f8;
+            --card-bg: #ffffff;
+            --primary: #0070f3;
+            --text: #333;
+        }
+
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+            margin: 0; 
+            padding: 40px; 
+            background: var(--bg-color); 
+            color: var(--text);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        h1 { margin: 0 0 10px 0; }
+        p { color: #666; }
+
+        section {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+
+        h2 { border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; }
+        h3 { margin-top: 20px; font-size: 1rem; color: #555; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        .demo-box {
+            background: #fafafa;
+            border: 1px dashed #ccc;
+            padding: 20px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100px;
+            margin: 15px 0;
+        }
+
+        button.trigger-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        button.trigger-btn:hover { opacity: 0.9; }
+
+        /* --- CUSTOMIZATION DEMO CSS --- */
+        .custom-theme {
+            --cap-background: #2d2d2d;
+            --cap-border-color: #444;
+            --cap-border-radius: 8px;
+            --cap-widget-height: 36px;
+            --cap-color: #fff;
+            --cap-checkbox-background: #444;
+            --cap-spinner-color: #00d2ff;
+        }
+
+        /* Hiding/Moving the Label */
+        /* Note: Since we can't access Shadow DOM styles directly for internal elements unless variables exist, 
+           we use available variables or container tricks. */
+        
+        /* Example: Hiding the "Cap" label if it relies on --cap-font or --cap-color */
+        .hide-label {
+            /* If the label uses the main color, this might hide it, but it hides everything text-based */
+            /* Best effort without specific variable for label display */
+            --cap-font: 0px serif; /* Trick to hide text if possible */
+        }
+
+        code {
+            background: #eee;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        
+        @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>CFCap Demo</h1>
-    
-    <!-- API endpoint is relative to root -->
-    <cap-widget 
-        data-cap-api-endpoint="/api/"
-    ></cap-widget>
+    <header>
+        <h1>CFCap Demo Suite</h1>
+        <p>Demonstrating Standard, Custom, and Floating modes.</p>
+    </header>
 
-    <p id="status" style="margin-top: 1rem; color: #666; font-size: 0.9rem;">
-        If widget doesn't load, check Console (F12)
-    </p>
+    <!-- 1. STANDARD LOCAL -->
+    <section>
+        <h2>1. Standard Mode (Local Assets)</h2>
+        <p>Served from <code>/widget/widget.js</code></p>
+        <div class="demo-box">
+            <cap-widget data-cap-api-endpoint="/api/"></cap-widget>
+        </div>
+    </section>
+
+    <!-- 2. CUSTOMIZATION -->
+    <section>
+        <h2>2. Customization</h2>
+        <p>Using CSS variables to change appearance (Dark Mode example).</p>
+        
+        <div class="grid">
+            <div>
+                <h3>Dark Theme</h3>
+                <div class="demo-box" style="background: #1a1a1a;">
+                    <cap-widget 
+                        class="custom-theme"
+                        data-cap-api-endpoint="/api/">
+                    </cap-widget>
+                </div>
+            </div>
+            <div>
+                <h3>Hidden Label Trick</h3>
+                <p>Attempting to hide label via CSS vars (e.g. font manipulation)</p>
+                <div class="demo-box">
+                    <!-- 
+                        To hide the label "Cap", typically you'd need a specific variable or 
+                        if it's exposed text. If the widget is Shadow DOM, we are limited to vars.
+                        Tricks: --cap-color: transparent (hides text), --cap-font-size: 0
+                    -->
+                    <cap-widget 
+                        style="--cap-color: transparent; --cap-checkbox-size: 30px;"
+                        data-cap-api-endpoint="/api/">
+                    </cap-widget>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. FLOATING MODE (LOCAL) -->
+    <section>
+        <h2>3. Floating Mode (Local Assets)</h2>
+        <p>Requires <code>cap-floating.min.js</code>. Click button to trigger.</p>
+        <div class="demo-box">
+            <button class="trigger-btn" data-cap-floating="#floating-local" data-cap-floating-position="bottom">
+                Open Floating Captcha
+            </button>
+            
+            <cap-widget 
+                id="floating-local"
+                data-cap-api-endpoint="/api/"
+                style="display: none;" 
+                onsolve="alert('Local Floating Solved! Token: ' + event.detail.token)">
+            </cap-widget>
+        </div>
+    </section>
+
+    <!-- 4. CDN STANDARD -->
+    <section>
+        <h2>4. Standard Mode (CDN: jsDelivr)</h2>
+        <p>Loading script directly from jsDelivr.</p>
+        <div class="demo-box">
+            <!-- We use an iframe or just a separate container to avoid script conflicts if needed, 
+                 but here we just rely on the tag. Note: The script tag is global, so since we loaded 
+                 local widget.js already, this might be redundant, but shows the markup. -->
+             <cap-widget data-cap-api-endpoint="/api/" id="cdn-widget"></cap-widget>
+             
+             <!-- Dynamically load CDN script to prove it works -->
+             <script type="module">
+                 import "https://cdn.jsdelivr.net/npm/@cap.js/widget@0.1.33/dist/widget.js";
+             </script>
+        </div>
+    </section>
+
+    <!-- 5. CDN FLOATING -->
+    <section>
+        <h2>5. Floating Mode (CDN: jsDelivr)</h2>
+        <p>Loading floating script from jsDelivr.</p>
+        <div class="demo-box">
+            <button class="trigger-btn" id="cdn-trigger" data-cap-floating="#floating-cdn" data-cap-floating-position="top">
+                Open CDN Floating Captcha
+            </button>
+
+            <cap-widget 
+                id="floating-cdn"
+                data-cap-api-endpoint="/api/"
+                style="display: none;"
+                onsolve="alert('CDN Floating Solved!')">
+            </cap-widget>
+
+            <!-- Load Floating Script from CDN -->
+            <script src="https://cdn.jsdelivr.net/npm/@cap.js/widget@0.1.33/cap-floating.min.js"></script>
+        </div>
+    </section>
+
 </div>
 
 </body>
