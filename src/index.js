@@ -112,31 +112,31 @@ export default {
     }
 
     // ---------------------------------------------------------
-    // 2. Static Assets (Frontend Serving)
+    // 2. Static Assets & Routing
     // ---------------------------------------------------------
 
     if (!env.ASSETS) {
       return new Response("Configuration Error: Assets binding not found.", { status: 500 });
     }
 
-    // REDIRECT: Root / -> /widget
+    // 1. STRICT 404 for Root path
     if (pathname === "/" || pathname === "") {
-      return Response.redirect(url.origin + "/widget", 302);
+      return new Response("Not Found", { status: 404 });
     }
 
-    // ALIAS: /widget/widget.js -> public/widget.js
+    // 2. Serve Widget JS: /widget/widget.js -> public/widget.js
     if (pathname === "/widget/widget.js") {
       const assetUrl = new URL("/widget.js", request.url);
       return env.ASSETS.fetch(new Request(assetUrl, request));
     }
 
-    // ALIAS: /widget -> public/index.html
+    // 3. Serve Demo Page: /widget, /widget/, or /widget/index.html -> public/index.html
     if (pathname === "/widget" || pathname === "/widget/" || pathname === "/widget/index.html") {
       const assetUrl = new URL("/index.html", request.url);
       return env.ASSETS.fetch(new Request(assetUrl, request));
     }
 
-    // Fallback: Serve matching asset or 404
+    // 4. Fallback for other assets (e.g. favicon)
     return env.ASSETS.fetch(request);
   },
 };
