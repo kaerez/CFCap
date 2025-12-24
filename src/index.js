@@ -14,7 +14,6 @@ export default {
     // 1. API Routes (Backend Logic)
     // ---------------------------------------------------------
 
-    // Initialize Cap with D1 storage adapter
     const cap = new Cap({
       storage: {
         challenges: {
@@ -79,35 +78,35 @@ export default {
     });
 
     // API Routes
-    if (request.method === "POST" && pathname === "/api/challenge") {
-      try {
-        const challenge = await cap.createChallenge();
-        return new Response(JSON.stringify(challenge), { headers: { "Content-Type": "application/json" } });
-      } catch (err) {
-        return new Response(JSON.stringify({ error: err.message }), { status: 500 });
-      }
-    }
-
-    if (request.method === "POST" && pathname === "/api/redeem") {
-      try {
-        const { token, solutions } = await request.json();
-        if (!token || !solutions) {
-          return new Response(JSON.stringify({ success: false, error: "Missing parameters" }), { status: 400 });
+    if (request.method === "POST") {
+      if (pathname === "/api/challenge") {
+        try {
+          const challenge = await cap.createChallenge();
+          return new Response(JSON.stringify(challenge), { headers: { "Content-Type": "application/json" } });
+        } catch (err) {
+          return new Response(JSON.stringify({ error: err.message }), { status: 500 });
         }
-        const result = await cap.redeemChallenge({ token, solutions });
-        return new Response(JSON.stringify(result), { headers: { "Content-Type": "application/json" } });
-      } catch (err) {
-        return new Response(JSON.stringify({ success: false, error: err.message }), { status: 500 });
       }
-    }
-
-    if (request.method === "POST" && pathname === "/api/validate") {
-      try {
-        const { token } = await request.json();
-        const result = await cap.validateToken(token);
-        return new Response(JSON.stringify(result), { headers: { "Content-Type": "application/json" } });
-      } catch(err) {
+      if (pathname === "/api/redeem") {
+        try {
+          const { token, solutions } = await request.json();
+          if (!token || !solutions) {
+            return new Response(JSON.stringify({ success: false, error: "Missing parameters" }), { status: 400 });
+          }
+          const result = await cap.redeemChallenge({ token, solutions });
+          return new Response(JSON.stringify(result), { headers: { "Content-Type": "application/json" } });
+        } catch (err) {
           return new Response(JSON.stringify({ success: false, error: err.message }), { status: 500 });
+        }
+      }
+      if (pathname === "/api/validate") {
+        try {
+          const { token } = await request.json();
+          const result = await cap.validateToken(token);
+          return new Response(JSON.stringify(result), { headers: { "Content-Type": "application/json" } });
+        } catch(err) {
+            return new Response(JSON.stringify({ success: false, error: err.message }), { status: 500 });
+        }
       }
     }
 
@@ -119,24 +118,26 @@ export default {
       return new Response("Configuration Error: Assets binding not found.", { status: 500 });
     }
 
-    // 1. STRICT 404 for Root path
+    // A. STRICT 404 for Root path
+    // Since we renamed index.html -> demo.html, Cloudflare won't auto-serve it here.
     if (pathname === "/" || pathname === "") {
       return new Response("Not Found", { status: 404 });
     }
 
-    // 2. Serve Widget JS: /widget/widget.js -> public/widget.js
+    // B. Serve Widget JS: /widget/widget.js -> public/widget.js
     if (pathname === "/widget/widget.js") {
       const assetUrl = new URL("/widget.js", request.url);
       return env.ASSETS.fetch(new Request(assetUrl, request));
     }
 
-    // 3. Serve Demo Page: /widget, /widget/, or /widget/index.html -> public/index.html
+    // C. Serve Demo Page: /widget -> public/demo.html
+    // We explicitly fetch 'demo.html' to avoid the 301 redirect loop associated with 'index.html'
     if (pathname === "/widget" || pathname === "/widget/" || pathname === "/widget/index.html") {
-      const assetUrl = new URL("/index.html", request.url);
+      const assetUrl = new URL("/demo.html", request.url);
       return env.ASSETS.fetch(new Request(assetUrl, request));
     }
 
-    // 4. Fallback for other assets (e.g. favicon)
+    // D. Fallback for other assets (e.g. favicon)
     return env.ASSETS.fetch(request);
   },
 };
