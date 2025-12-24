@@ -8,5 +8,4 @@ node_modules
 .wrangler
 .vscode
 .DS_Store
-dist
 worker
