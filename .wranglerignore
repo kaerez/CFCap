@@ -1,22 +1,4 @@
-# ============================================
-# repo/kaerez/cfcap/.wranglerignore
-# ============================================
-
-# 1. Explicitly ignore heavy/sensitive folders first
-node_modules/
-.git/
-.github/
-.wrangler/
-src/
-wrangler.json
-package.json
-bun.lockb
-schema.sql
-
-# 2. Ignore everything else by default
 *
-
-# 3. Whitelist: Allow only the specific asset folders
 !demo/
 !demo/**
 !widget/
