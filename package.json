@@ -4,8 +4,10 @@
   "description": "CFCap - Cloudflare Worker for @cap.js/server",
   "main": "src/index.js",
   "scripts": {
-    "start": "wrangler dev",
-    "deploy": "wrangler deploy",
+    "start": "npm run build && wrangler dev",
+    "build": "rm -rf dist && mkdir -p dist && cp -r demo dist/ && cp -r widget dist/",
+    "predeploy": "npm run build",
+    "deploy": "npm run predeploy && wrangler deploy",
     "cf-typegen": "wrangler types"
   },
   "author": "Erez Kalman",
