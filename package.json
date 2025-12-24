@@ -6,8 +6,8 @@
   "scripts": {
     "start": "npm run build && wrangler dev",
     "build": "rm -rf dist && mkdir -p dist && cp -r demo dist/ && cp -r widget dist/",
-    "predeploy": "npm run build",
-    "deploy": "npm run predeploy && wrangler deploy",
+    "postinstall": "npm run build",
+    "deploy": "npm run build && wrangler deploy",
     "cf-typegen": "wrangler types"
   },
   "author": "Erez Kalman",
