@@ -124,15 +124,15 @@ export default {
     }
 
     // B. Serve Demo Page
-    // URL: /demo OR /landing.html
-    // Physical File: demo/landing.html (in repo root)
     if (pathname === "/demo" || pathname === "/landing.html") {
       const assetUrl = new URL("/demo/landing.html", request.url);
       return env.ASSETS.fetch(new Request(assetUrl, request));
     }
 
     // C. Default Asset Serving
-    // This handles /widget/widget.js (generated at widget/widget.js in root)
+    // Handles:
+    // - /widget/widget.js
+    // - /widget/cap-floating.min.js
     return env.ASSETS.fetch(request);
   },
 };
