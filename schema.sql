@@ -3,16 +3,14 @@
 -- file: schema.sql
 -- =============================================
 
-DROP TABLE IF EXISTS challenges;
-DROP TABLE IF EXISTS tokens;
-
--- SQLite (D1) Schema adapted from Postgres example
+-- Challenges Table
 CREATE TABLE IF NOT EXISTS challenges (
     token TEXT PRIMARY KEY,
-    data TEXT NOT NULL, -- Storing JSON as TEXT in SQLite
+    data TEXT NOT NULL,
     expires INTEGER NOT NULL
 );
 
+-- Tokens Table
 CREATE TABLE IF NOT EXISTS tokens (
     key TEXT PRIMARY KEY,
     expires INTEGER NOT NULL
