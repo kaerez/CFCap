@@ -91,17 +91,10 @@ file: demo/landing.html
         }
 
         /* --- LAYOUT --- */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
 
-        /* --- NAVBAR --- */
         .navbar {
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            position: sticky; top: 0; z-index: 100;
             background: rgba(255, 255, 255, 0.8);
             backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border-color);
@@ -109,99 +102,66 @@ file: demo/landing.html
         [data-theme="dark"] .navbar { background: rgba(0, 0, 0, 0.8); }
 
         .navbar-inner {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 16px 20px;
-            max-width: 1200px;
-            margin: 0 auto;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 16px 20px; max-width: 1200px; margin: 0 auto;
         }
 
         .brand { font-weight: 600; color: var(--text-primary); text-decoration: none; font-size: 1.1rem; }
         
         .icon-btn {
-            background: transparent;
-            border: 1px solid var(--border-color);
-            color: var(--text-primary);
-            width: 36px; height: 36px;
-            border-radius: 8px;
-            cursor: pointer;
+            background: transparent; border: 1px solid var(--border-color);
+            color: var(--text-primary); width: 36px; height: 36px;
+            border-radius: 8px; cursor: pointer;
             display: flex; align-items: center; justify-content: center;
         }
         .icon-btn:hover { border-color: var(--brand-color); color: var(--brand-color); }
 
-        /* --- HERO --- */
         .header { text-align: center; padding: 80px 0 60px; }
         .header h1 {
-            font-size: 3.5rem;
-            font-weight: 700;
-            margin-bottom: 16px;
+            font-size: 3.5rem; font-weight: 700; margin-bottom: 16px;
             background: linear-gradient(135deg, var(--text-primary) 0%, var(--brand-color) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
         .header p {
-            font-size: 1.25rem;
-            color: var(--text-secondary);
-            max-width: 600px;
-            margin: 0 auto 32px;
+            font-size: 1.25rem; color: var(--text-secondary);
+            max-width: 600px; margin: 0 auto 32px;
         }
 
         .cta-group { display: flex; gap: 16px; justify-content: center; }
         .btn {
-            padding: 12px 24px;
-            border-radius: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            text-decoration: none;
-            transition: transform 0.1s;
+            padding: 12px 24px; border-radius: 12px; font-weight: 600;
+            cursor: pointer; text-decoration: none; transition: transform 0.1s;
         }
         .btn.primary { background: var(--brand-color); color: white; border: none; }
         .btn.ghost { background: var(--surface-card); color: var(--text-primary); border: 1px solid var(--border-color); }
         .btn:hover { opacity: 0.9; transform: translateY(-1px); }
 
-        /* --- SECTIONS --- */
         .section {
             background: var(--surface-card);
             border: 1px solid var(--border-color);
-            border-radius: 24px;
-            padding: 40px;
-            margin-bottom: 40px;
-            box-shadow: var(--shadow-sm);
+            border-radius: 24px; padding: 40px;
+            margin-bottom: 40px; box-shadow: var(--shadow-sm);
         }
         .section h2 { font-size: 2rem; margin-bottom: 12px; }
         .section p { color: var(--text-secondary); margin-bottom: 32px; font-size: 1.05rem; }
 
-        /* --- DEMO CONTAINER (Hero) --- */
         .demo-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+            display: grid; grid-template-columns: 1fr 1fr;
             border: 1px solid var(--border-color);
-            border-radius: 16px;
-            overflow: hidden;
+            border-radius: 16px; overflow: hidden;
         }
 
         .demo-widget {
-            /* FIXED: Blue-ish background for hero demo to match screenshot */
             background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%);
             padding: 40px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
             border-right: 1px solid var(--border-color);
             position: relative;
         }
-        
-        [data-theme="dark"] .demo-widget {
-            background: linear-gradient(135deg, #0c4a6e 0%, #082f49 100%);
-        }
+        [data-theme="dark"] .demo-widget { background: linear-gradient(135deg, #0c4a6e 0%, #082f49 100%); }
 
-        .demo-code {
-            background: var(--code-bg);
-            display: flex;
-            flex-direction: column;
-        }
+        .demo-code { background: var(--code-bg); display: flex; flex-direction: column; }
 
         .demo-status {
             margin-top: 24px;
@@ -214,90 +174,111 @@ file: demo/landing.html
             backdrop-filter: blur(4px);
         }
 
+        /* --- STROBE OVERLAY WRAPPER --- */
+        .widget-wrapper {
+            position: relative;
+            border-radius: 14px;
+            overflow: hidden; 
+            display: inline-block;
+        }
+        
+        /* Strobe Effect */
+        .widget-wrapper::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.4) 50%, transparent 70%);
+            background-size: 200% 100%;
+            animation: strobe 2.5s infinite linear;
+            pointer-events: none;
+            z-index: 10;
+        }
+        
+        .widget-wrapper.solved::after { display: none; }
+        
+        @keyframes strobe {
+            0% { background-position: 100% 0; }
+            100% { background-position: -100% 0; }
+        }
+
+        /* --- BRANDING OVERLAY (CSS-ONLY) --- */
+        .branding-overlay { position: relative; display: inline-block; }
+        
+        /* Overlay "CFCap" */
+        .branding-overlay::before {
+            content: "CFCap";
+            position: absolute;
+            bottom: 12px; right: 12px;
+            font-size: 10px;
+            color: #999;
+            background: var(--cap-background, #fdfdfd); 
+            padding-left: 4px;
+            pointer-events: none;
+            font-family: system-ui, sans-serif;
+            z-index: 5;
+        }
+        [data-theme="dark"] .branding-overlay::before,
+        .custom-dark .branding-overlay::before {
+            background: #111; color: #888;
+        }
+
+        /* Hide Original "Cap" Link - Requested Method */
+        /* Note: ::part is also added to ensure it works across shadow boundary */
+        cap-widget a { display: none !important; }
+        cap-widget::part(attribution) { display: none !important; }
+        cap-widget::part(credits) { display: none !important; }
+
+
         /* --- TABS --- */
         .tabs { display: flex; border-bottom: 1px solid var(--border-color); background: rgba(0,0,0,0.02); }
         .tab-btn {
-            padding: 12px 24px;
-            background: transparent;
-            border: none;
-            color: var(--text-secondary);
-            cursor: pointer;
-            font-weight: 500;
+            padding: 12px 24px; background: transparent; border: none;
+            color: var(--text-secondary); cursor: pointer; font-weight: 500;
             border-bottom: 2px solid transparent;
         }
         .tab-btn.active { color: var(--text-primary); border-bottom-color: var(--brand-color); background: var(--surface-card); }
-        
         .code-content { display: none; padding: 24px; overflow: auto; }
         .code-content.active { display: block; }
 
         pre { 
-            margin: 0; 
-            font-family: 'JetBrains Mono', monospace; 
-            font-size: 0.85rem; 
-            color: var(--code-text);
-            line-height: 1.5;
+            margin: 0; font-family: 'JetBrains Mono', monospace; 
+            font-size: 0.85rem; color: var(--code-text); line-height: 1.5;
         }
 
-        /* --- CUSTOMIZATION GRID --- */
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
         
         .custom-card {
             background: var(--bg-secondary);
             border: 1px solid var(--border-color);
-            border-radius: 16px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
+            border-radius: 16px; overflow: hidden;
+            display: flex; flex-direction: column;
         }
-        
         .custom-preview {
-            padding: 40px 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-bottom: 1px solid var(--border-color);
-            background: var(--surface-card); /* Default background */
-        }
-
-        .custom-card h4 {
-            padding: 16px 20px 0;
-            margin: 0;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            color: var(--text-secondary);
+            padding: 40px 20px; display: flex; justify-content: center;
+            align-items: center; border-bottom: 1px solid var(--border-color);
             background: var(--surface-card);
         }
-
+        .custom-card h4 {
+            padding: 16px 20px 0; margin: 0; font-size: 0.9rem;
+            text-transform: uppercase; color: var(--text-secondary);
+            background: var(--surface-card);
+        }
         .code-box {
-            padding: 20px;
-            background: var(--code-bg);
-            border-top: 1px solid var(--border-color);
-            flex-grow: 1;
-            position: relative;
+            padding: 20px; background: var(--code-bg);
+            border-top: 1px solid var(--border-color); flex-grow: 1; position: relative;
         }
 
         .copy-btn {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            background: var(--copy-btn-bg);
-            border: none;
-            color: var(--copy-btn-text);
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 0.75rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            z-index: 10;
-            font-weight: 600;
+            position: absolute; top: 12px; right: 12px;
+            background: var(--copy-btn-bg); border: none; color: var(--copy-btn-text);
+            padding: 6px 12px; border-radius: 6px; font-size: 0.75rem;
+            cursor: pointer; transition: all 0.2s; z-index: 10; font-weight: 600;
         }
         .copy-btn:hover { background: var(--copy-btn-hover); color: var(--text-primary); }
 
-        /* FIXES FOR CUSTOMIZATIONS */
-        
+        /* CUSTOMIZATIONS */
         .preview-dark { background: #1a1a1a !important; }
         
-        /* 3. Dark Theme - Force Variables */
         cap-widget.custom-dark {
             --cap-background: #111;
             --cap-border-color: #333;
@@ -306,27 +287,21 @@ file: demo/landing.html
             --cap-checkbox-background: #222;
         }
 
-        /* 4. Hide Label - Force font size 0 */
+        /* Hide Label: Hides text via font-size, and hides credit link via display:none */
         cap-widget.hide-label {
-            --cap-font-size: 0px !important; 
-            font-size: 0px !important; 
-            --cap-font: 0px/0px sans-serif !important;
+            --cap-font-size: 0px !important;
+            font-size: 0px !important;
         }
-        /* Also attempt to hide via ::part if exposed */
-        cap-widget.hide-label::part(label) { display: none; }
+        cap-widget.hide-label a { display: none !important; }
+        cap-widget.hide-label::part(attribution) { display: none !important; }
 
-        /* 5. Replace Label - Flex Alignment */
+        /* Replace Label Container */
         .replace-label-wrap {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: var(--surface-card);
-            border: 1px solid var(--border-color);
-            padding: 8px 16px;
-            border-radius: 12px;
+            display: flex; align-items: center; gap: 12px;
+            background: var(--surface-card); border: 1px solid var(--border-color);
+            padding: 8px 16px; border-radius: 12px;
         }
 
-        /* 6. Kitchen Sink - Explicit Styling */
         cap-widget.custom-kitchen {
             --cap-border-radius: 0px !important;
             --cap-color: #2cb67d !important;
@@ -336,29 +311,27 @@ file: demo/landing.html
             --cap-checkbox-size: 30px !important;
         }
 
-        /* --- TERMINAL (Events) --- */
         .terminal {
-            background: #0d1117; /* Always dark for terminal */
-            border-radius: 12px;
-            color: #3fb950;
-            font-family: monospace;
-            padding: 16px;
-            height: 200px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column-reverse;
-            word-break: break-all;
+            background: #0d1117; border-radius: 12px;
+            color: #3fb950; font-family: monospace; padding: 16px;
+            height: 200px; overflow-y: auto; display: flex;
+            flex-direction: column-reverse; word-break: break-all;
         }
 
-        /* Syntax Classes */
-        .k { color: var(--token-keyword); }
-        .s { color: var(--token-string); }
-        .c { color: var(--token-comment); }
-        .t { color: var(--token-tag); }
-        .a { color: var(--token-attr); }
+        #toast {
+            visibility: hidden; min-width: 200px;
+            background: var(--surface-overlay); color: var(--text-primary);
+            text-align: center; border-radius: 50px; padding: 12px 24px;
+            position: fixed; z-index: 1000; left: 50%; bottom: 30px;
+            transform: translateX(-50%) translateY(20px); opacity: 0;
+            transition: all 0.3s; box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            border: 1px solid var(--border-light); backdrop-filter: blur(10px);
+            font-weight: 500;
+        }
+        #toast.show { visibility: visible; opacity: 1; transform: translateX(-50%) translateY(0); }
 
-        /* Floating Buttons */
-        .float-btn-group { display: flex; gap: 12px; margin-bottom: 24px; }
+        .k { color: var(--token-keyword); } .s { color: var(--token-string); } 
+        .c { color: var(--token-comment); } .t { color: var(--token-tag); } .a { color: var(--token-attr); }
 
         @media (max-width: 768px) {
             .demo-container, .grid-2 { grid-template-columns: 1fr; }
@@ -395,85 +368,14 @@ file: demo/landing.html
         
         <div class="demo-container">
             <div class="demo-widget">
-                <!-- TEMPLATE: Strobe Effect & Accurate Branding -->
-                <cap-widget id="main-cap" data-cap-api-endpoint="/api/" data-cap-worker-count="4">
-                    <template shadowrootmode="open">
-                        <style>
-                            .captcha {
-                                box-sizing: border-box;
-                                background-color: var(--cap-background, #fdfdfd);
-                                border: 1px solid var(--cap-border-color, #dddddd8f);
-                                border-radius: var(--cap-border-radius, 14px);
-                                user-select: none;
-                                height: var(--cap-widget-height, 58px);
-                                width: var(--cap-widget-width, 230px);
-                                display: flex;
-                                align-items: center;
-                                padding: var(--cap-widget-padding, 14px);
-                                gap: var(--cap-gap, 15px);
-                                cursor: pointer;
-                                position: relative;
-                                overflow: hidden;
-                                color: var(--cap-color, #212121);
-                                font-family: var(--cap-font, system-ui, sans-serif);
-                            }
-                            
-                            /* Strobe Effect */
-                            .captcha:not([data-state="done"])::after {
-                                content: "";
-                                position: absolute;
-                                top: 0; left: 0; width: 100%; height: 100%;
-                                background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.4) 50%, transparent 70%);
-                                background-size: 200% 100%;
-                                animation: strobe 2.5s infinite linear;
-                                pointer-events: none;
-                            }
-                            
-                            @keyframes strobe {
-                                0% { background-position: 100% 0; }
-                                100% { background-position: -100% 0; }
-                            }
-
-                            .checkbox {
-                                width: var(--cap-checkbox-size, 25px);
-                                height: var(--cap-checkbox-size, 25px);
-                                border: var(--cap-checkbox-border, 1px solid #aaaaaad1);
-                                border-radius: var(--cap-checkbox-border-radius, 6px);
-                                background-color: var(--cap-checkbox-background, #fafafa91);
-                                display: flex; align-items: center; justify-content: center;
-                            }
-                            
-                            /* Success State - Green Check */
-                            .captcha[data-state="done"] .checkbox {
-                                border-color: #22c55e;
-                                background: #22c55e;
-                                position: relative;
-                            }
-                            .captcha[data-state="done"] .checkbox::after {
-                                content: '';
-                                width: 5px; height: 10px;
-                                border: solid white;
-                                border-width: 0 2px 2px 0;
-                                transform: rotate(45deg);
-                                margin-bottom: 2px;
-                            }
-                            
-                            .captcha p { margin: 0; font-weight: 500; font-size: 15px; }
-                            
-                            /* Branding: "CFCap" as requested */
-                            .credits {
-                                position: absolute; bottom: 6px; right: 10px;
-                                font-size: 10px; color: #999; text-decoration: none;
-                            }
-                        </style>
-                        <div class="captcha" part="container">
-                            <div class="checkbox" part="checkbox"></div>
-                            <p part="label">I'm a human</p>
-                            <!-- UPDATED: CFCap branding for the widget link -->
-                            <a class="credits" href="https://capjs.js.org/" target="_blank">CFCap</a>
-                        </div>
-                    </template>
-                </cap-widget>
+                <!-- Wrapper for Strobe & Branding Overlay -->
+                <div class="widget-wrapper branding-overlay" id="main-wrapper">
+                    <cap-widget 
+                        id="main-cap" 
+                        data-cap-api-endpoint="/api/" 
+                        data-cap-worker-count="4">
+                    </cap-widget>
+                </div>
                 <div id="demo-status" class="demo-status">Verify to continue</div>
             </div>
             <div class="demo-code">
@@ -508,7 +410,9 @@ widget.addEventListener(<span class="s">"solve"</span>, <span class="k">async</s
         <h2>Event Handling</h2>
         <div class="demo-container">
             <div class="demo-widget" style="background: var(--surface-overlay);">
-                <cap-widget id="event-cap" data-cap-api-endpoint="/api/"></cap-widget>
+                <div class="widget-wrapper branding-overlay">
+                    <cap-widget id="event-cap" data-cap-api-endpoint="/api/"></cap-widget>
+                </div>
                 <button class="btn ghost" style="margin-top:16px; font-size:0.8rem;" onclick="document.getElementById('event-cap').reset()">Reset Widget</button>
             </div>
             <div class="demo-code" style="background:#0d1117;">
@@ -527,7 +431,9 @@ widget.addEventListener(<span class="s">"solve"</span>, <span class="k">async</s
             <div class="custom-card">
                 <h4>Dark Theme</h4>
                 <div class="custom-preview preview-dark">
-                    <cap-widget class="custom-dark" data-cap-api-endpoint="/api/"></cap-widget>
+                    <div class="widget-wrapper branding-overlay">
+                        <cap-widget class="custom-dark" data-cap-api-endpoint="/api/"></cap-widget>
+                    </div>
                 </div>
                 <div class="code-box">
 <pre>.custom-dark {
@@ -542,12 +448,20 @@ widget.addEventListener(<span class="s">"solve"</span>, <span class="k">async</s
             <div class="custom-card">
                 <h4>Hide Label</h4>
                 <div class="custom-preview">
-                    <cap-widget class="hide-label" data-cap-api-endpoint="/api/"></cap-widget>
+                    <!-- Overlay hides label visually using pseudo-element masking if variable support is partial -->
+                    <div class="widget-wrapper branding-overlay">
+                        <cap-widget class="hide-label" data-cap-api-endpoint="/api/"></cap-widget>
+                    </div>
                 </div>
                 <div class="code-box">
-<pre>.hide-label {
+<pre>/* Hide attribution link */
+cap-widget a {
+  display: none !important;
+}
+
+/* Hide "I'm a human" text */
+cap-widget.hide-label {
   --cap-font-size: 0px;
-  /* Collapses text space */
 }</pre>
                     <button class="copy-btn" onclick="copyCode(this)">Copy</button>
                 </div>
@@ -558,13 +472,18 @@ widget.addEventListener(<span class="s">"solve"</span>, <span class="k">async</s
                 <h4>Replace Label</h4>
                 <div class="custom-preview">
                     <div class="replace-label-wrap">
-                        <cap-widget class="hide-label" style="--cap-border-color:transparent; --cap-background:transparent; --cap-widget-padding:0;" data-cap-api-endpoint="/api/"></cap-widget>
+                        <div class="widget-wrapper branding-overlay">
+                            <cap-widget class="hide-label" style="--cap-border-color:transparent; --cap-background:transparent; --cap-widget-padding:0;" data-cap-api-endpoint="/api/"></cap-widget>
+                        </div>
                         <span style="font-weight:600; font-size:0.9rem;">Verify Humanity</span>
                     </div>
                 </div>
                 <div class="code-box">
 <pre>.container { display: flex; ... }
-/* Hide label, add custom span */</pre>
+
+cap-widget a {
+  display: none !important;
+}</pre>
                     <button class="copy-btn" onclick="copyCode(this)">Copy</button>
                 </div>
             </div>
@@ -573,7 +492,9 @@ widget.addEventListener(<span class="s">"solve"</span>, <span class="k">async</s
             <div class="custom-card">
                 <h4>Kitchen Sink</h4>
                 <div class="custom-preview" style="background:#2d2d2d;">
-                    <cap-widget class="custom-kitchen" data-cap-api-endpoint="/api/"></cap-widget>
+                    <div class="widget-wrapper branding-overlay">
+                        <cap-widget class="custom-kitchen" data-cap-api-endpoint="/api/"></cap-widget>
+                    </div>
                 </div>
                 <div class="code-box">
 <pre>.kitchen {
@@ -652,13 +573,8 @@ widget.addEventListener(<span class="s">"solve"</span>, <span class="k">async</s
         d.style.color = "var(--success-color)";
         d.style.borderColor = "var(--success-color)";
         
-        // Post-verification state update for Shadow DOM if possible
-        if(main.shadowRoot) {
-            const p = main.shadowRoot.querySelector('p');
-            if(p) p.innerText = "You're a human";
-            const c = main.shadowRoot.querySelector('.captcha');
-            if(c) c.setAttribute('data-state', 'done');
-        }
+        // Remove strobe effect class from wrapper
+        document.getElementById('main-wrapper').classList.add('solved');
     });
 
     const evt = document.getElementById('event-cap');
