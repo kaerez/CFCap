@@ -7,218 +7,719 @@ file: demo/landing.html
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CFCap Comprehensive Demo</title>
+    <title>CFCap - Cloudflare CAP Worker</title>
     
     <!-- LOCAL ASSETS -->
     <script src="/widget/widget.js" type="module"></script>
     <script src="/widget/cap-floating.min.js"></script>
 
+    <!-- FONTS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
     <style>
         :root {
-            --bg-color: #f4f6f8;
-            --card-bg: #ffffff;
-            --primary: #0070f3;
-            --text: #333;
+            /* Theme Variables */
+            --primary-gradient: linear-gradient(135deg, rgba(0, 113, 227, 0.92) 0%, rgba(10, 132, 255, 0.72) 100%);
+            --text-primary: #1d1d1f;
+            --text-secondary: rgba(29, 29, 31, 0.72);
+            --bg-secondary: #f5f5f7;
+            --border-light: rgba(60, 60, 67, 0.18);
+            --border-soft: rgba(60, 60, 67, 0.12);
+            --brand-color: #0071e3;
+            --surface-card: rgba(255, 255, 255, 0.9);
+            --surface-overlay: rgba(255, 255, 255, 0.85);
+            --surface-muted: rgba(0, 0, 0, 0.04);
+            
+            /* Light Mode Code Colors */
+            --code-bg: #f6f8fa;
+            --code-text: #24292f;
+            --code-border: #d0d7de;
+            --copy-btn-bg: rgba(0, 0, 0, 0.08);
+            --copy-btn-hover: rgba(0, 0, 0, 0.15);
+            --copy-btn-text: #57606a;
+            
+            /* Syntax Tokens (Light) */
+            --token-keyword: #cf222e;
+            --token-string: #0a3069;
+            --token-comment: #6e7781;
+            --token-func: #8250df;
+
+            --accent-soft: rgba(0, 113, 227, 0.12);
+            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --success-color: #34c759;
+            --error-color: #ff453a;
         }
 
-        body { 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
-            margin: 0; 
-            padding: 40px; 
-            background: var(--bg-color); 
-            color: var(--text);
+        [data-theme="dark"] {
+            --text-primary: #f5f5f7;
+            --text-secondary: rgba(235, 235, 245, 0.7);
+            --bg-secondary: #000000;
+            --border-light: rgba(235, 235, 245, 0.2);
+            --border-soft: rgba(235, 235, 245, 0.15);
+            --brand-color: #0a84ff;
+            --surface-card: rgba(46, 46, 48, 0.72);
+            --surface-overlay: rgba(58, 58, 60, 0.62);
+            --surface-muted: rgba(235, 235, 245, 0.08);
+            
+            /* Dark Mode Code Colors */
+            --code-bg: #0d1117;
+            --code-text: #c9d1d9;
+            --code-border: #30363d;
+            --copy-btn-bg: rgba(255, 255, 255, 0.1);
+            --copy-btn-hover: rgba(255, 255, 255, 0.2);
+            --copy-btn-text: #8b949e;
+
+            /* Syntax Tokens (Dark) */
+            --token-keyword: #ff7b72;
+            --token-string: #a5d6ff;
+            --token-comment: #8b949e;
+            --token-func: #d2a8ff;
+
+            --accent-soft: rgba(10, 132, 255, 0.24);
         }
 
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* --- BACKGROUND ANIMATION --- */
+        .bg-animated {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            pointer-events: none;
+            background: 
+                radial-gradient(circle at 15% 50%, rgba(0, 113, 227, 0.08) 0%, transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(0, 113, 227, 0.08) 0%, transparent 25%);
+        }
+
+        /* --- NAVBAR --- */
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-light);
+        }
+        [data-theme="dark"] .navbar { background: rgba(22, 22, 24, 0.8); }
+
+        .navbar-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 1.05rem;
+        }
+
+        .nav-actions { display: flex; gap: 8px; }
+
+        .icon-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border: 1px solid var(--border-light);
+            background: transparent;
+            color: var(--text-secondary);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .icon-btn:hover { background: var(--accent-soft); color: var(--brand-color); }
+        .icon-btn svg { width: 18px; height: 18px; }
+
+        /* --- LAYOUT --- */
         .container {
-            max-width: 1000px;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 96px 0 64px;
+        }
+
+        .header h1 {
+            font-size: 3.25rem;
+            font-weight: 700;
+            margin-bottom: 18px;
+            color: var(--text-primary);
+            letter-spacing: -0.04em;
+            line-height: 1.1;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+            max-width: 700px;
             margin: 0 auto;
         }
 
-        header {
-            text-align: center;
-            margin-bottom: 40px;
+        .cta-group { margin-top: 32px; display: flex; gap: 16px; justify-content: center; }
+
+        .btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 14px 24px; border-radius: 14px;
+            font-weight: 600; font-size: 0.95rem;
+            cursor: pointer; text-decoration: none;
+            transition: all 0.25s ease;
+        }
+        .btn.primary {
+            background: var(--brand-color); color: white;
+            border: none; box-shadow: 0 4px 14px rgba(0, 113, 227, 0.3);
+        }
+        .btn.primary:hover { filter: brightness(1.1); transform: translateY(-1px); }
+        
+        .btn.ghost {
+            background: var(--surface-overlay); color: var(--text-primary);
+            border: 1px solid var(--border-soft);
+        }
+        .btn.ghost:hover { background: var(--surface-card); box-shadow: var(--shadow-sm); }
+
+        /* --- SECTIONS --- */
+        .section {
+            background: var(--surface-card);
+            border-radius: 28px;
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+            margin-bottom: 48px;
+            border: 1px solid var(--border-soft);
+            padding: 48px;
         }
 
-        h1 { margin: 0 0 10px 0; }
-        p { color: #666; }
+        .section h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+        }
 
-        section {
-            background: var(--card-bg);
-            padding: 30px;
+        .section p {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            margin-bottom: 32px;
+            line-height: 1.7;
+        }
+
+        /* --- CODE & COPY --- */
+        .code-block, .custom-code {
+            position: relative;
+            background: var(--code-bg);
+            color: var(--code-text);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
             border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            margin-bottom: 30px;
+            overflow: auto;
+            border: 1px solid var(--code-border);
+            padding: 48px 24px 24px 24px;
+            margin: 0;
+            white-space: pre;
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
         }
 
-        h2 { border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; }
-        h3 { margin-top: 20px; font-size: 1rem; color: #555; text-transform: uppercase; letter-spacing: 0.5px; }
+        .copy-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: var(--copy-btn-bg);
+            border: none;
+            color: var(--copy-btn-text);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            z-index: 10;
+            font-weight: 600;
+        }
+        .copy-btn:hover { background: var(--copy-btn-hover); color: var(--text-primary); }
 
-        .demo-box {
-            background: #fafafa;
-            border: 1px dashed #ccc;
-            padding: 20px;
-            border-radius: 8px;
+        /* --- DEMO CONTAINERS --- */
+        .demo-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 28px;
+            margin-top: 36px;
+            min-height: 500px;
+            border: 1px solid var(--border-soft);
+            border-radius: 24px;
+            overflow: hidden;
+        }
+
+        .demo-section {
+            background: var(--surface-overlay);
+            padding: 32px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 100px;
-            margin: 15px 0;
         }
 
-        button.trigger-btn {
-            background: var(--primary);
-            color: white;
+        .integration-section {
+            background: var(--surface-card); /* Match card background for smoother transition to code box */
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- TABS --- */
+        .tab-buttons {
+            display: flex;
+            border-bottom: 1px solid var(--border-soft);
+            background: var(--surface-muted);
+        }
+        .tab-btn {
+            padding: 12px 24px;
+            background: transparent;
             border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
+            color: var(--text-secondary);
             cursor: pointer;
-            font-size: 14px;
+            font-weight: 500;
+            border-bottom: 2px solid transparent;
+        }
+        .tab-btn.active { color: var(--text-primary); border-bottom-color: var(--brand-color); background: var(--surface-overlay); }
+        .tab-content { display: none; height: 100%; }
+        .tab-content.active { display: block; height: 100%; }
+        
+        /* Ensure code block fills the tab content fully */
+        .tab-content .code-block {
+            height: 100%;
+            border-radius: 0;
+            border: none;
+        }
+
+        /* --- FEATURE GRID --- */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+        .feature-card {
+            background: var(--surface-overlay);
+            padding: 32px;
+            border-radius: 20px;
+            border: 1px solid var(--border-soft);
+        }
+        .feature-card h3 { font-size: 1.2rem; margin-bottom: 12px; color: var(--text-primary); }
+
+        /* --- API ENDPOINTS --- */
+        .api-endpoint {
+            background: var(--surface-overlay);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            border: 1px solid var(--border-soft);
+        }
+        .api-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+        .method {
+            background: var(--accent-soft);
+            color: var(--brand-color);
+            padding: 4px 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+        .url { font-family: monospace; color: var(--text-primary); }
+
+        /* --- CUSTOMIZATION GRID --- */
+        .custom-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            align-items: stretch;
+        }
+        .custom-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-light);
+            border-radius: 20px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100%; /* Fill grid cell */
+        }
+        .custom-card h4 {
+            width: 100%; margin-bottom: 16px; font-size: 0.9rem;
+            text-transform: uppercase; color: var(--text-secondary);
+        }
+        .custom-code {
+            margin-top: auto; /* Push to bottom */
+            flex: 1; /* Take up remaining space */
+            display: flex;
+            flex-direction: column;
+            min-height: 150px; /* Ensure minimum size */
+        }
+
+        /* --- TERMINAL --- */
+        .terminal {
+            background: var(--code-bg);
+            border-radius: 12px;
+            border: 1px solid var(--code-border);
+            height: 300px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .terminal-header {
+            background: var(--surface-muted);
+            padding: 8px 16px;
+            border-bottom: 1px solid var(--code-border);
+            display: flex;
+            gap: 8px;
+        }
+        .dot { width: 10px; height: 10px; border-radius: 50%; }
+        .terminal-body {
+            padding: 16px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            color: var(--success-color);
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column-reverse;
+        }
+
+        /* --- TOAST --- */
+        #toast {
+            visibility: hidden;
+            min-width: 200px;
+            background: var(--surface-overlay);
+            color: var(--text-primary);
+            text-align: center;
+            border-radius: 50px;
+            padding: 12px 24px;
+            position: fixed;
+            z-index: 1000;
+            left: 50%; bottom: 30px;
+            transform: translateX(-50%) translateY(20px);
+            opacity: 0;
+            transition: all 0.3s;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            border: 1px solid var(--border-light);
+            backdrop-filter: blur(10px);
             font-weight: 500;
         }
-        button.trigger-btn:hover { opacity: 0.9; }
+        #toast.show { visibility: visible; opacity: 1; transform: translateX(-50%) translateY(0); }
 
-        /* --- CUSTOMIZATION DEMO CSS --- */
-        .custom-theme {
-            --cap-background: #2d2d2d;
-            --cap-border-color: #444;
-            --cap-border-radius: 8px;
-            --cap-widget-height: 36px;
-            --cap-color: #fff;
-            --cap-checkbox-background: #444;
-            --cap-spinner-color: #00d2ff;
+        /* Syntax Colors (Mapped to Vars) */
+        .k { color: var(--token-keyword); } 
+        .s { color: var(--token-string); } 
+        .c { color: var(--token-comment); }
+        .f { color: var(--token-func); }
+
+        @media (max-width: 768px) {
+            .demo-container { grid-template-columns: 1fr; }
+            .header h1 { font-size: 2.5rem; }
+            .section { padding: 32px 24px; }
         }
-
-        /* Hiding/Moving the Label */
-        /* Note: Since we can't access Shadow DOM styles directly for internal elements unless variables exist, 
-           we use available variables or container tricks. */
-        
-        /* Example: Hiding the "Cap" label if it relies on --cap-font or --cap-color */
-        .hide-label {
-            /* If the label uses the main color, this might hide it, but it hides everything text-based */
-            /* Best effort without specific variable for label display */
-            --cap-font: 0px serif; /* Trick to hide text if possible */
-        }
-
-        code {
-            background: #eee;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 0.9em;
-        }
-
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        
-        @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
     </style>
 </head>
-<body>
+<body data-theme="light">
+
+<div id="toast">Operation Successful</div>
+<div class="bg-animated"></div>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="navbar-inner">
+        <a href="#" class="brand">CFCap - Cap Worker</a>
+        <div class="nav-actions">
+            <a href="https://github.com/kaerez/cfcap" target="_blank" class="icon-btn" aria-label="GitHub">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.58 2 12.26c0 4.51 2.87 8.33 6.85 9.69.5.09.68-.22.68-.49 0-.24-.01-.87-.01-1.71-2.78.62-3.37-1.37-3.37-1.37-.45-1.17-1.11-1.48-1.11-1.48-.91-.64.07-.63.07-.63 1 .07 1.53 1.06 1.53 1.06.9 1.57 2.36 1.12 2.93.85.09-.67.35-1.12.63-1.38-2.22-.26-4.56-1.13-4.56-5.04 0-1.11.39-2.01 1.03-2.72-.1-.26-.45-1.3.1-2.71 0 0 .85-.28 2.78 1.04A9.36 9.36 0 0112 6.84c.86 0 1.73.12 2.54.34 1.93-1.32 2.78-1.04 2.78-1.04.55 1.41.2 2.45.1 2.71.64.71 1.03 1.61 1.03 2.72 0 3.92-2.34 4.77-4.57 5.03.36.32.68.95.68 1.92 0 1.39-.01 2.51-.01 2.86 0 .27.18.58.69.48A10.05 10.05 0 0022 12.26C22 6.58 17.52 2 12 2z"></path></svg>
+            </a>
+            <button id="themeToggle" class="icon-btn" aria-label="Toggle theme">
+                <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+            </button>
+        </div>
+    </div>
+</nav>
 
 <div class="container">
-    <header>
-        <h1>CFCap Demo Suite</h1>
-        <p>Demonstrating Standard, Custom, and Floating modes.</p>
-    </header>
-
-    <!-- 1. STANDARD LOCAL -->
-    <section>
-        <h2>1. Standard Mode (Local Assets)</h2>
-        <p>Served from <code>/widget/widget.js</code></p>
-        <div class="demo-box">
-            <cap-widget data-cap-api-endpoint="/api/"></cap-widget>
+    <div class="header">
+        <h1>CFCap - Cloudflare CAP Worker</h1>
+        <p>Next-generation, privacy-first CAPTCHA service powered by a Cloudflare Worker.</p>
+        <div class="cta-group">
+            <a href="#integration" class="btn primary">Get Started</a>
+            <a href="#api" class="btn ghost">API Reference</a>
         </div>
-    </section>
+    </div>
 
-    <!-- 2. CUSTOMIZATION -->
-    <section>
-        <h2>2. Customization</h2>
-        <p>Using CSS variables to change appearance (Dark Mode example).</p>
+    <!-- MAIN DEMO -->
+    <div class="section" id="integration">
+        <h2>Live Demo & Integration</h2>
+        <p>Experience CAP Worker in action. Integrate with just a few lines of code.</p>
+        <div class="demo-container">
+            <div class="demo-section">
+                <h3 style="margin-bottom: 20px; font-size: 1.1rem; color: var(--text-primary);">Interactive Widget</h3>
+                <cap-widget id="main-cap" data-cap-api-endpoint="/api/" data-cap-worker-count="4"></cap-widget>
+                <div id="demo-status" class="demo-status">Verify to continue</div>
+            </div>
+            <div class="integration-section">
+                <div class="code-tabs">
+                    <div class="tab-buttons">
+                        <button class="tab-btn active" onclick="switchTab('html')">HTML</button>
+                        <button class="tab-btn" onclick="switchTab('js')">JavaScript</button>
+                    </div>
+                    <div id="tab-html" class="tab-content active">
+                        <div class="code-block" data-code='<script src="https://your-domain.com/widget/widget.js" type="module"></script>
+
+<cap-widget 
+  data-cap-api-endpoint="/api/"
+  data-cap-worker-count="4">
+</cap-widget>'>&lt;<span class="k">script</span> src=<span class="s">"/widget.js"</span> type=<span class="s">"module"</span>&gt;&lt;/<span class="k">script</span>&gt;
+
+&lt;<span class="k">cap-widget</span> 
+  data-cap-api-endpoint=<span class="s">"/api/"</span>
+  data-cap-worker-count=<span class="s">"4"</span>&gt;
+&lt;/<span class="k">cap-widget</span>&gt;<button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                    </div>
+                    <div id="tab-js" class="tab-content">
+                        <div class="code-block" data-code='const widget = document.querySelector("cap-widget");
+
+widget.addEventListener("solve", async (e) => {
+  const token = e.detail.token;
+  await fetch("/api/redeem", {
+    method: "POST",
+    body: JSON.stringify({ token })
+  });
+});'><span class="k">const</span> widget = document.querySelector(<span class="s">"cap-widget"</span>);
+
+widget.addEventListener(<span class="s">"solve"</span>, <span class="k">async</span> (e) => {
+  <span class="k">const</span> token = e.detail.token;
+  <span class="k">await</span> fetch(<span class="s">"/api/redeem"</span>, {
+    method: <span class="s">"POST"</span>,
+    body: JSON.stringify({ token })
+  });
+});<button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FLOATING MODE -->
+    <div class="section">
+        <h2>Floating Mode</h2>
+        <p>Invisible until triggered. Requires the floating script extension.</p>
+        <div class="cta-group" style="justify-content:flex-start; margin-bottom:24px;">
+            <button class="btn ghost" data-cap-floating="#float-bot" data-cap-floating-position="bottom">Open Bottom</button>
+            <button class="btn ghost" data-cap-floating="#float-top" data-cap-floating-position="top">Open Top</button>
+        </div>
         
-        <div class="grid">
-            <div>
-                <h3>Dark Theme</h3>
-                <div class="demo-box" style="background: #1a1a1a;">
-                    <cap-widget 
-                        class="custom-theme"
-                        data-cap-api-endpoint="/api/">
-                    </cap-widget>
-                </div>
-            </div>
-            <div>
-                <h3>Hidden Label Trick</h3>
-                <p>Attempting to hide label via CSS vars (e.g. font manipulation)</p>
-                <div class="demo-box">
-                    <!-- 
-                        To hide the label "Cap", typically you'd need a specific variable or 
-                        if it's exposed text. If the widget is Shadow DOM, we are limited to vars.
-                        Tricks: --cap-color: transparent (hides text), --cap-font-size: 0
-                    -->
-                    <cap-widget 
-                        style="--cap-color: transparent; --cap-checkbox-size: 30px;"
-                        data-cap-api-endpoint="/api/">
-                    </cap-widget>
-                </div>
-            </div>
-        </div>
-    </section>
+        <div class="custom-grid">
+            <!-- Bottom: Local -->
+            <div class="custom-card">
+                <h4>Bottom (Local)</h4>
+                <div class="custom-code" data-code='<!-- Local Integration -->
+<script src="/widget/widget.js" type="module"></script>
+<script src="/widget/cap-floating.min.js"></script>
 
-    <!-- 3. FLOATING MODE (LOCAL) -->
-    <section>
-        <h2>3. Floating Mode (Local Assets)</h2>
-        <p>Requires <code>cap-floating.min.js</code>. Click button to trigger.</p>
-        <div class="demo-box">
-            <button class="trigger-btn" data-cap-floating="#floating-local" data-cap-floating-position="bottom">
-                Open Floating Captcha
-            </button>
+<button data-cap-floating="#float-bot" data-cap-floating-position="bottom">Open Bottom</button>
+<cap-widget id="float-bot" style="display:none" data-cap-api-endpoint="/api/"></cap-widget>'>
+<span class="c">&lt;!-- Local Integration --&gt;</span>
+&lt;<span class="k">script</span> src=<span class="s">"/widget.js"</span> type=<span class="s">"module"</span>&gt;&lt;/<span class="k">script</span>&gt;
+&lt;<span class="k">script</span> src=<span class="s">"/cap-floating.min.js"</span>&gt;&lt;/<span class="k">script</span>&gt;
+
+&lt;<span class="k">button</span> data-cap-floating=<span class="s">"#float-bot"</span> 
+        data-cap-floating-position=<span class="s">"bottom"</span>&gt;Open Bottom&lt;/<span class="k">button</span>&gt;
+&lt;<span class="k">cap-widget</span> id=<span class="s">"float-bot"</span> style=<span class="s">"display:none"</span>&gt;&lt;/<span class="k">cap-widget</span>&gt;<button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            </div>
             
-            <cap-widget 
-                id="floating-local"
-                data-cap-api-endpoint="/api/"
-                style="display: none;" 
-                onsolve="alert('Local Floating Solved! Token: ' + event.detail.token)">
-            </cap-widget>
+            <!-- Top: CDN -->
+            <div class="custom-card">
+                <h4>Top (CDN)</h4>
+                <div class="custom-code" data-code='<!-- CDN Integration -->
+<script src="https://cdn.jsdelivr.net/npm/@cap.js/widget@0.1.33/dist/widget.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/@cap.js/widget@0.1.33/cap-floating.min.js"></script>
+
+<button data-cap-floating="#float-top" data-cap-floating-position="top">Open Top</button>
+<cap-widget id="float-top" style="display:none" data-cap-api-endpoint="/api/"></cap-widget>'>
+<span class="c">&lt;!-- CDN Integration --&gt;</span>
+&lt;<span class="k">script</span> src=<span class="s">"https://cdn.../widget.js"</span>&gt;&lt;/<span class="k">script</span>&gt;
+&lt;<span class="k">script</span> src=<span class="s">"https://cdn.../cap-floating.min.js"</span>&gt;&lt;/<span class="k">script</span>&gt;
+
+&lt;<span class="k">button</span> data-cap-floating=<span class="s">"#float-top"</span> 
+        data-cap-floating-position=<span class="s">"top"</span>&gt;Open Top&lt;/<span class="k">button</span>&gt;
+&lt;<span class="k">cap-widget</span> id=<span class="s">"float-top"</span> style=<span class="s">"display:none"</span>&gt;&lt;/<span class="k">cap-widget</span>&gt;<button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            </div>
         </div>
-    </section>
 
-    <!-- 4. CDN STANDARD -->
-    <section>
-        <h2>4. Standard Mode (CDN: jsDelivr)</h2>
-        <p>Loading script directly from jsDelivr.</p>
-        <div class="demo-box">
-            <!-- We use an iframe or just a separate container to avoid script conflicts if needed, 
-                 but here we just rely on the tag. Note: The script tag is global, so since we loaded 
-                 local widget.js already, this might be redundant, but shows the markup. -->
-             <cap-widget data-cap-api-endpoint="/api/" id="cdn-widget"></cap-widget>
-             
-             <!-- Dynamically load CDN script to prove it works -->
-             <script type="module">
-                 import "https://cdn.jsdelivr.net/npm/@cap.js/widget@0.1.33/dist/widget.js";
-             </script>
+        <!-- Hidden Widgets for Floating Demo -->
+        <cap-widget id="float-bot" style="display:none" data-cap-api-endpoint="/api/" onsolve="showToast('Bottom Solved!')"></cap-widget>
+        <cap-widget id="float-top" style="display:none" data-cap-api-endpoint="/api/" onsolve="showToast('Top Solved!')"></cap-widget>
+    </div>
+
+    <!-- CUSTOMIZATION -->
+    <div class="section">
+        <h2>Customization</h2>
+        <div class="custom-grid">
+            <div class="custom-card">
+                <h4>Dark Theme</h4>
+                <cap-widget class="custom-dark" data-cap-api-endpoint="/api/"></cap-widget>
+                <div class="custom-code" data-code=".custom-dark { --cap-background: #111; --cap-color: #fff; }">
+.custom-dark {
+  --cap-background: #111;
+  --cap-color: #fff;
+}<button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            </div>
+            <div class="custom-card">
+                <h4>Hide Label</h4>
+                <cap-widget class="hide-label" data-cap-api-endpoint="/api/"></cap-widget>
+                <div class="custom-code" data-code=".hide-label { --cap-font: 0px/0px sans-serif; }">
+.hide-label {
+  --cap-font: 0px/0px sans-serif;
+}<button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            </div>
+            <div class="custom-card">
+                <h4>Replace Label</h4>
+                <div class="change-label-wrap">
+                    <cap-widget class="hide-label" style="--cap-border-color:transparent; --cap-background:transparent; --cap-widget-padding:0;" data-cap-api-endpoint="/api/"></cap-widget>
+                    <span style="font-weight:500;">Verify Humanity</span>
+                </div>
+                <div class="custom-code" data-code="/* Hide original label, wrap in container with new text span */">
+/* Hide original label, wrap in
+   container with new text span */<button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            </div>
+            <div class="custom-card">
+                <h4>Kitchen Sink</h4>
+                <cap-widget class="custom-kitchen" data-cap-api-endpoint="/api/"></cap-widget>
+                <div class="custom-code" data-code=".kitchen { --cap-border-radius: 0; --cap-color: #2cb67d; }">
+.kitchen {
+  --cap-border-radius: 0;
+  --cap-color: #2cb67d;
+}<button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+            </div>
         </div>
-    </section>
+    </div>
 
-    <!-- 5. CDN FLOATING -->
-    <section>
-        <h2>5. Floating Mode (CDN: jsDelivr)</h2>
-        <p>Loading floating script from jsDelivr.</p>
-        <div class="demo-box">
-            <button class="trigger-btn" id="cdn-trigger" data-cap-floating="#floating-cdn" data-cap-floating-position="top">
-                Open CDN Floating Captcha
-            </button>
-
-            <cap-widget 
-                id="floating-cdn"
-                data-cap-api-endpoint="/api/"
-                style="display: none;"
-                onsolve="alert('CDN Floating Solved!')">
-            </cap-widget>
-
-            <!-- Load Floating Script from CDN -->
-            <script src="https://cdn.jsdelivr.net/npm/@cap.js/widget@0.1.33/cap-floating.min.js"></script>
+    <!-- EVENTS -->
+    <div class="section">
+        <h2>Event Handling</h2>
+        <div class="demo-container">
+            <div class="demo-section">
+                <cap-widget id="event-cap" data-cap-api-endpoint="/api/"></cap-widget>
+                <button class="btn ghost" style="margin-top:20px; font-size:0.8rem;" onclick="document.getElementById('event-cap').reset()">Reset</button>
+            </div>
+            <div class="integration-section" style="background: var(--surface-card);">
+                <div class="terminal">
+                    <div class="terminal-header">
+                        <div class="dot" style="background:#ff5f56"></div>
+                        <div class="dot" style="background:#ffbd2e"></div>
+                        <div class="dot" style="background:#27c93f"></div>
+                        <span style="color:var(--text-secondary); font-size:0.8rem; margin-left:8px;">Console</span>
+                    </div>
+                    <div class="terminal-body" id="event-log">
+                        <div class="log-row">System Ready...</div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </section>
+    </div>
 
 </div>
 
+<!-- SCRIPT AT THE END: Ensures all DOM elements exist before floating script runs -->
+<script>
+    // Theme Logic
+    const themeToggle = document.getElementById('themeToggle');
+    const sun = document.querySelector('.sun');
+    const moon = document.querySelector('.moon');
+
+    function setTheme(theme) {
+        document.body.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+        if(theme === 'dark') { 
+            if(sun) sun.style.display='none'; 
+            if(moon) moon.style.display='block'; 
+        } else { 
+            if(sun) sun.style.display='block'; 
+            if(moon) moon.style.display='none'; 
+        }
+    }
+    const saved = localStorage.getItem('theme') || 'light';
+    setTheme(saved);
+    if(themeToggle) themeToggle.addEventListener('click', () => {
+        const cur = document.body.getAttribute('data-theme');
+        setTheme(cur === 'dark' ? 'light' : 'dark');
+    });
+
+    // Code Copy
+    window.copyCode = function(btn) {
+        const code = btn.parentElement.dataset.code;
+        navigator.clipboard.writeText(code);
+        const orig = btn.innerText;
+        btn.innerText = "Copied!";
+        setTimeout(() => btn.innerText = orig, 2000);
+    }
+
+    // Tabs
+    window.switchTab = function(t) {
+        document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+        document.getElementById('tab-'+t).classList.add('active');
+        document.querySelector(`.tab-btn[onclick*="${t}"]`).classList.add('active');
+    }
+
+    // Toast
+    window.showToast = function(m) {
+        const t = document.getElementById('toast');
+        t.innerText = m;
+        t.classList.add('show');
+        setTimeout(() => t.classList.remove('show'), 3000);
+    }
+
+    // Main Demo
+    const main = document.getElementById('main-cap');
+    if(main) main.addEventListener('solve', (e) => {
+        const s = document.getElementById('demo-status');
+        s.innerText = "✅ Verified! " + e.detail.token.substring(0,8) + "...";
+        s.style.color = "var(--success-color)";
+    });
+
+    // Events Demo
+    const evtCap = document.getElementById('event-cap');
+    const logBox = document.getElementById('event-log');
+    if(evtCap) {
+        function log(m) {
+            const d = document.createElement('div');
+            d.className = 'log-row';
+            d.innerHTML = `<span style="color:var(--text-secondary);margin-right:8px">${new Date().toLocaleTimeString()}</span> ${m}`;
+            logBox.prepend(d);
+        }
+        evtCap.addEventListener('solve', (e) => log('SOLVE: '+e.detail.token.substring(0,8)+'...'));
+        evtCap.addEventListener('error', (e) => log('ERROR: '+JSON.stringify(e.detail)));
+        evtCap.addEventListener('reset', () => log('RESET'));
+        evtCap.addEventListener('progress', () => log('PROGRESS...'));
+    }
+</script>
 </body>
 </html>
