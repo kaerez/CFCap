@@ -5,10 +5,53 @@
 
 import Cap from "@cap.js/server";
 
+// Helper: Check Access Control
+// Returns true if allowed, false otherwise.
+function checkAccess(request, env) {
+  if (!env.ALLOWED || env.ALLOWED.trim() === "") return true;
+
+  // Parse ALLOWED list
+  // Strip quotes (single/double) and spaces, split by comma
+  const allowedRaw = env.ALLOWED.replace(/['"]/g, "").split(",");
+  const allowedPatterns = allowedRaw.map(s => s.trim()).filter(s => s.length > 0);
+
+  if (allowedPatterns.length === 0) return true;
+
+  const referer = request.headers.get("Referer");
+  const origin = request.headers.get("Origin");
+  const urlToCheck = referer || origin;
+
+  if (!urlToCheck) return false; // Enforce presence if restriction exists
+
+  try {
+    const hostname = new URL(urlToCheck).hostname;
+
+    return allowedPatterns.some(pattern => {
+      if (pattern.startsWith("*.")) {
+        const domain = pattern.slice(2);
+        return hostname.endsWith(domain) && hostname.split('.').length > domain.split('.').length;
+      }
+      return hostname === pattern;
+    });
+  } catch (e) {
+    return false;
+  }
+}
+
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
     const pathname = url.pathname;
+
+    // ---------------------------------------------------------
+    // 0. ACCESS CONTROL
+    // ---------------------------------------------------------
+    const isApiOrWidget = pathname.startsWith("/api") || pathname.startsWith("/widget");
+    if (isApiOrWidget) {
+      if (!checkAccess(request, env)) {
+        return new Response("Forbidden", { status: 403 });
+      }
+    }
 
     // ---------------------------------------------------------
     // 1. API Routes (Backend Logic)
@@ -22,8 +65,8 @@ export default {
               INSERT OR REPLACE INTO challenges (token, data, expires)
               VALUES (?, ?, ?)
             `)
-            .bind(token, JSON.stringify(challengeData), challengeData.expires)
-            .run();
+              .bind(token, JSON.stringify(challengeData), challengeData.expires)
+              .run();
           },
           read: async (token) => {
             const row = await env.DB.prepare(`
@@ -33,8 +76,8 @@ export default {
                 AND expires > ?
               LIMIT 1
             `)
-            .bind(token, Date.now())
-            .first();
+              .bind(token, Date.now())
+              .first();
             return row
               ? { challenge: JSON.parse(row.data), expires: Number(row.expires) }
               : null;
@@ -52,8 +95,8 @@ export default {
               INSERT OR REPLACE INTO tokens (key, expires)
               VALUES (?, ?)
             `)
-            .bind(tokenKey, expires)
-            .run();
+              .bind(tokenKey, expires)
+              .run();
           },
           get: async (tokenKey) => {
             const row = await env.DB.prepare(`
@@ -63,8 +106,8 @@ export default {
                 AND expires > ?
               LIMIT 1
             `)
-            .bind(tokenKey, Date.now())
-            .first();
+              .bind(tokenKey, Date.now())
+              .first();
             return row ? Number(row.expires) : null;
           },
           delete: async (tokenKey) => {
@@ -104,8 +147,8 @@ export default {
           const { token } = await request.json();
           const result = await cap.validateToken(token);
           return new Response(JSON.stringify(result), { headers: { "Content-Type": "application/json" } });
-        } catch(err) {
-            return new Response(JSON.stringify({ success: false, error: err.message }), { status: 500 });
+        } catch (err) {
+          return new Response(JSON.stringify({ success: false, error: err.message }), { status: 500 });
         }
       }
     }
@@ -118,13 +161,8 @@ export default {
       return new Response("Configuration Error: Assets binding not found.", { status: 500 });
     }
 
-    // A. STRICT 404 for Root path
-    if (pathname === "/" || pathname === "") {
-      return new Response(null, { status: 404 });
-    }
-
-    // B. Serve Demo Page
-    if (pathname === "/demo" || pathname === "/landing.html") {
+    // Serve Demo Page at Root or /demo
+    if (pathname === "/" || pathname === "" || pathname === "/demo" || pathname === "/landing.html") {
       const assetUrl = new URL("/demo/landing.html", request.url);
       return env.ASSETS.fetch(new Request(assetUrl, request));
     }
