@@ -976,30 +976,165 @@ widget.addEventListener(<span class="s">"solve"</span>, <span class="k">async</s
         <div class="section" id="api">
             <h2>API Reference</h2>
 
+            <!-- 1. CHALLENGE -->
             <div class="api-endpoint">
                 <div class="api-header">
                     <span class="method">POST</span>
                     <span class="url">/api/challenge</span>
+                    <span class="url" style="background: var(--accent-soft); color: var(--brand-color);">Generate Challenge</span>
                 </div>
                 <p>Creates a new CAPTCHA challenge with cryptographically secure tokens and returns challenge data for
                     client rendering.</p>
+
+                <h4 style="margin: 24px 0 12px 0;">Request Example:</h4>
+                <div class="code-box" style="height: auto; min-height: 60px;">
+                    <div class="code-wrapper" style="position: relative; padding: 20px;">
+                        <button class="copy-btn" onclick="copyCode(this)" style="position: absolute; top: 10px; right: 10px;">Copy</button>
+                        <div class="code-content active" style="padding: 0; position: static;">
+                            <pre><span class="k">fetch</span>(<span class="s">'/api/challenge'</span>, { <span class="a">method</span>: <span class="s">'POST'</span>, <span class="a">headers</span>: { <span class="s">'Content-Type'</span>: <span class="s">'application/json'</span> } })</pre>
+                        </div>
+                    </div>
+                </div>
+
+                <h4 style="margin: 24px 0 12px 0;">Response Example:</h4>
+                <div class="code-box" style="height: auto; min-height: auto;">
+                    <div class="code-wrapper" style="position: relative; padding: 20px;">
+                        <button class="copy-btn" onclick="copyCode(this)" style="position: absolute; top: 10px; right: 10px;">Copy</button>
+                        <div class="code-content active" style="padding: 0; position: static;">
+                            <pre>{ <span class="a">"token"</span>: <span class="s">"785975238a3c4f0c1b0c39ed75e6e4cc..."</span>, <span class="a">"challenge"</span>: { <span class="a">"c"</span>: <span class="s">50</span>, <span class="a">"s"</span>: <span class="s">32</span>, <span class="a">"d"</span>: <span class="s">4</span> }, <span class="a">"expires"</span>: <span class="s">1753924498818</span> }</pre>
+                        </div>
+                    </div>
+                </div>
             </div>
 
+            <!-- 2. REDEEM -->
             <div class="api-endpoint">
                 <div class="api-header">
                     <span class="method">POST</span>
                     <span class="url">/api/redeem</span>
+                    <span class="url" style="background: var(--accent-soft); color: var(--brand-color);">Verify Solution</span>
                 </div>
                 <p>Validates user-submitted CAPTCHA solution and returns verification token for subsequent API calls.
                 </p>
+
+                <div style="background: var(--surface-muted); padding: 20px; border-radius: 12px; margin-bottom: 24px;">
+                    <h4 style="margin: 0 0 12px 0;">Request Parameters:</h4>
+                    <div style="background: var(--accent-soft); color: var(--text-primary); padding: 10px 16px; border-radius: 8px; margin-bottom: 8px; font-family: monospace;">
+                        <strong>token</strong> <em style="opacity: 0.7">(string, required)</em> - Challenge token from /api/challenge
+                    </div>
+                    <div style="background: var(--accent-soft); color: var(--text-primary); padding: 10px 16px; border-radius: 8px; font-family: monospace;">
+                        <strong>solutions</strong> <em style="opacity: 0.7">(number[], required)</em> - Array of user solution indices
+                    </div>
+                </div>
+
+                <h4 style="margin: 24px 0 12px 0;">Request Example:</h4>
+                <div class="code-box" style="height: auto; min-height: auto;">
+                    <div class="code-wrapper" style="position: relative; padding: 20px;">
+                        <button class="copy-btn" onclick="copyCode(this)" style="position: absolute; top: 10px; right: 10px;">Copy</button>
+                        <div class="code-content active" style="padding: 0; position: static;">
+                            <pre><span class="k">fetch</span>(<span class="s">'/api/redeem'</span>, { 
+  <span class="a">method</span>: <span class="s">'POST'</span>, 
+  <span class="a">headers</span>: { <span class="s">'Content-Type'</span>: <span class="s">'application/json'</span> }, 
+  <span class="a">body</span>: JSON.stringify({ <span class="a">token</span>: <span class="s">'...'</span>, <span class="a">solutions</span>: [<span class="s">1</span>, <span class="s">3</span>, <span class="s">7</span>] }) 
+})</pre>
+                        </div>
+                    </div>
+                </div>
+
+                <h4 style="margin: 24px 0 12px 0;">Response Example:</h4>
+                <div class="code-box" style="height: auto; min-height: auto;">
+                    <div class="code-wrapper" style="position: relative; padding: 20px;">
+                        <button class="copy-btn" onclick="copyCode(this)" style="position: absolute; top: 10px; right: 10px;">Copy</button>
+                        <div class="code-content active" style="padding: 0; position: static;">
+                            <pre>{ <span class="a">"success"</span>: <span class="k">true</span>, <span class="a">"token"</span>: <span class="s">"785975238a3c4f0c..."</span> }</pre>
+                        </div>
+                    </div>
+                </div>
             </div>
 
+            <!-- 3. VALIDATE -->
             <div class="api-endpoint">
                 <div class="api-header">
                     <span class="method">POST</span>
                     <span class="url">/api/validate</span>
+                    <span class="url" style="background: var(--accent-soft); color: var(--brand-color);">Token Validation</span>
                 </div>
                 <p>Validates previously issued tokens and optionally consumes them for one-time use scenarios.</p>
+
+                <div style="background: var(--surface-muted); padding: 20px; border-radius: 12px; margin-bottom: 24px;">
+                    <h4 style="margin: 0 0 12px 0;">Request Parameters:</h4>
+                    <div style="background: var(--accent-soft); color: var(--text-primary); padding: 10px 16px; border-radius: 8px; margin-bottom: 8px; font-family: monospace;">
+                        <strong>token</strong> <em style="opacity: 0.7">(string, required)</em> - Verification token to validate
+                    </div>
+                    <div style="background: var(--accent-soft); color: var(--text-primary); padding: 10px 16px; border-radius: 8px; font-family: monospace;">
+                        <strong>keepToken</strong> <em style="opacity: 0.7">(boolean, optional)</em> - Preserve token for reuse (default: false)
+                    </div>
+                </div>
+
+                <h4 style="margin: 24px 0 12px 0;">Request Example:</h4>
+                <div class="code-box" style="height: auto; min-height: auto;">
+                    <div class="code-wrapper" style="position: relative; padding: 20px;">
+                        <button class="copy-btn" onclick="copyCode(this)" style="position: absolute; top: 10px; right: 10px;">Copy</button>
+                        <div class="code-content active" style="padding: 0; position: static;">
+                            <pre><span class="k">fetch</span>(<span class="s">'/api/validate'</span>, { 
+  <span class="a">method</span>: <span class="s">'POST'</span>, 
+  <span class="a">headers</span>: { <span class="s">'Content-Type'</span>: <span class="s">'application/json'</span> }, 
+  <span class="a">body</span>: JSON.stringify({ <span class="a">token</span>: <span class="s">'...'</span>, <span class="a">keepToken</span>: <span class="k">false</span> }) 
+})</pre>
+                        </div>
+                    </div>
+                </div>
+
+                <h4 style="margin: 24px 0 12px 0;">Response Example:</h4>
+                <div class="code-box" style="height: auto; min-height: auto;">
+                    <div class="code-wrapper" style="position: relative; padding: 20px;">
+                        <button class="copy-btn" onclick="copyCode(this)" style="position: absolute; top: 10px; right: 10px;">Copy</button>
+                        <div class="code-content active" style="padding: 0; position: static;">
+                            <pre>{ <span class="a">"success"</span>: <span class="k">true</span> }</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. DELETE -->
+            <div class="api-endpoint">
+                <div class="api-header">
+                    <span class="method">POST</span>
+                    <span class="url">/api/delete</span>
+                    <span class="url" style="background: var(--error-color); color: white;">Delete Token</span>
+                </div>
+                <p>Manually validates and immediately expires (deletes) a token from storage.</p>
+
+                <div style="background: var(--surface-muted); padding: 20px; border-radius: 12px; margin-bottom: 24px;">
+                    <h4 style="margin: 0 0 12px 0;">Request Parameters:</h4>
+                    <div style="background: var(--accent-soft); color: var(--text-primary); padding: 10px 16px; border-radius: 8px; font-family: monospace;">
+                        <strong>token</strong> <em style="opacity: 0.7">(string, required)</em> - Token to delete
+                    </div>
+                </div>
+
+                <h4 style="margin: 24px 0 12px 0;">Request Example:</h4>
+                <div class="code-box" style="height: auto; min-height: auto;">
+                    <div class="code-wrapper" style="position: relative; padding: 20px;">
+                        <button class="copy-btn" onclick="copyCode(this)" style="position: absolute; top: 10px; right: 10px;">Copy</button>
+                        <div class="code-content active" style="padding: 0; position: static;">
+                            <pre><span class="k">fetch</span>(<span class="s">'/api/delete'</span>, { 
+  <span class="a">method</span>: <span class="s">'POST'</span>, 
+  <span class="a">headers</span>: { <span class="s">'Content-Type'</span>: <span class="s">'application/json'</span> }, 
+  <span class="a">body</span>: JSON.stringify({ <span class="a">token</span>: <span class="s">'...'</span> }) 
+})</pre>
+                        </div>
+                    </div>
+                </div>
+
+                <h4 style="margin: 24px 0 12px 0;">Response Example:</h4>
+                <div class="code-box" style="height: auto; min-height: auto;">
+                    <div class="code-wrapper" style="position: relative; padding: 20px;">
+                        <button class="copy-btn" onclick="copyCode(this)" style="position: absolute; top: 10px; right: 10px;">Copy</button>
+                        <div class="code-content active" style="padding: 0; position: static;">
+                            <pre>{ <span class="a">"success"</span>: <span class="k">true</span> }</pre>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -1119,12 +1254,7 @@ w.addEventListener(<span class="s">"error"</span>, <span class="k">e</span> => c
                             </div>
                             <div id="hide-2" class="code-content">
                                 <pre>/* Hide Link */
-cap-widget.hide-label::part(attribution) { display: none !important; }
-
-/* Hide "I'm a human" */
-cap-widget.hide-label {
-  /* removed */
-}</pre>
+cap-widget.hide-label::part(attribution) { display: none !important; }</pre>
                             </div>
                         </div>
                     </div>
