@@ -94,7 +94,10 @@ export default {
     const isApiOrWidget = pathname.startsWith("/api") || pathname.startsWith("/widget");
     if (isApiOrWidget) {
       if (!checkAccess(request, env)) {
-        return new Response("Forbidden", { status: 403 });
+        return new Response("Forbidden", {
+          status: 403,
+          headers: getCorsHeaders(request, env)
+        });
       }
     }
 
@@ -205,7 +208,7 @@ export default {
           });
         }
       }
-      if (pathname === "/api/validate") {
+      if (pathname === "/api/validate" || pathname === "/api/verify") {
         try {
           const { token } = await request.json();
           const result = await cap.validateToken(token);
@@ -223,6 +226,10 @@ export default {
         }
       }
     }
+
+    // ---------------------------------------------------------
+    // 2. Routing & Asset Serving
+    // ---------------------------------------------------------
 
     // ---------------------------------------------------------
     // 2. Routing & Asset Serving
@@ -255,6 +262,17 @@ export default {
     // Handles:
     // - /widget/widget.js
     // - /widget/cap-floating.min.js
-    return env.ASSETS.fetch(request);
+    // We attach CORS headers here to ensure /widget resources can be loaded cross-origin if allowed
+    let response = await env.ASSETS.fetch(request);
+
+    // Create new response to modify headers (Response objects are immutable)
+    response = new Response(response.body, response);
+
+    const corsHeaders = getCorsHeaders(request, env);
+    for (const [key, value] of Object.entries(corsHeaders)) {
+      response.headers.set(key, value);
+    }
+
+    return response;
   },
 };
