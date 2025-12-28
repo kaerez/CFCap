@@ -200,8 +200,12 @@ export default {
         },
       });
 
+      // [DEBUG] Logging Routing Decisions
+      console.log(`DEBUG: Routing - Method: ${request.method}, Path: ${pathname}, IsValidation: ${isValidationEndpoint}`);
+
       // API Routes
       if (request.method === "POST") {
+        console.log("DEBUG: Entered POST block");
         const corsHeaders = getCorsHeaders(request, env);
 
         if (pathname === "/api/challenge") {
