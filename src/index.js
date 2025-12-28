@@ -92,7 +92,10 @@ export default {
     }
 
     const isApiOrWidget = pathname.startsWith("/api") || pathname.startsWith("/widget");
-    if (isApiOrWidget) {
+    // [CHANGE] Exclude validation endpoints from strict access checks to allow server-to-server calls
+    const isValidationEndpoint = pathname === "/api/validate" || pathname === "/api/verify";
+
+    if (isApiOrWidget && !isValidationEndpoint) {
       if (!checkAccess(request, env)) {
         return new Response("Forbidden", {
           status: 403,
