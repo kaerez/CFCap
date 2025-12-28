@@ -300,6 +300,7 @@ export default {
       return response;
     } catch (e) {
       // Global Error Handler
+      console.error("DEBUG: GLOBAL ERROR:", e);
       return new Response(JSON.stringify({
         success: false,
         error: "Internal Server Error",
