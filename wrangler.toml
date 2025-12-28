@@ -17,3 +17,8 @@ bucket_name = "cap-challenges"
 [[r2_buckets]]
 binding = "R2_TOKENS"
 bucket_name = "cap-tokens"
+
+[vars]
+ALLOWED = "*.secops.workers.dev"
+CHALLENGE_TTL = 300
+TOKEN_TTL = 330
