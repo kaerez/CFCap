@@ -891,7 +891,12 @@ file: demo/landing.html
 
 widget.addEventListener(<span class="s">"solve"</span>, <span class="k">async</span> (e) => {
   <span class="k">const</span> token = e.detail.token;
-  <span class="c">// Verify with backend...</span>
+  <span class="c">// Verify with backend</span>
+  <span class="k">await</span> <span class="k">fetch</span>(<span class="s">"/api/validate"</span>, {
+    <span class="a">method</span>: <span class="s">"POST"</span>,
+    <span class="a">headers</span>: { <span class="s">"Content-Type"</span>: <span class="s">"application/json"</span> },
+    <span class="a">body</span>: JSON.stringify({ <span class="a">token</span>, <span class="a">keepToken</span>: <span class="k">false</span> })
+  });
 });</pre>
                         </div>
 
@@ -981,28 +986,29 @@ widget.addEventListener(<span class="s">"solve"</span>, <span class="k">async</s
                 <div class="api-header">
                     <span class="method">POST</span>
                     <span class="url">/api/challenge</span>
-                    <span class="url" style="background: var(--accent-soft); color: var(--brand-color);">Generate Challenge</span>
+                    <span class="url" style="background: var(--accent-soft); color: var(--brand-color);">Generate
+                        Challenge</span>
                 </div>
                 <p>Creates a new CAPTCHA challenge with cryptographically secure tokens and returns challenge data for
                     client rendering.</p>
 
-                <h4 style="margin: 24px 0 12px 0;">Request Example:</h4>
-                <div class="code-box" style="height: auto; min-height: 60px;">
-                    <div class="code-wrapper" style="position: relative; padding: 20px;">
-                        <button class="copy-btn" onclick="copyCode(this)" style="position: absolute; top: 10px; right: 10px;">Copy</button>
-                        <div class="code-content active" style="padding: 0; position: static;">
-                            <pre><span class="k">fetch</span>(<span class="s">'/api/challenge'</span>, { <span class="a">method</span>: <span class="s">'POST'</span>, <span class="a">headers</span>: { <span class="s">'Content-Type'</span>: <span class="s">'application/json'</span> } })</pre>
-                        </div>
+                <h4 style="margin: 32px 0 16px 0;">Request Example:</h4>
+                <div
+                    style="background: var(--bg-secondary); border: 1px solid var(--border-soft); border-radius: 16px; padding: 20px; position: relative;">
+                    <button class="copy-btn" onclick="copyCode(this)"
+                        style="position: absolute; top: 16px; right: 16px;">Copy</button>
+                    <div class="code-content active" style="padding: 0; display: block; overflow-x: auto;">
+                        <pre><span class="k">fetch</span>(<span class="s">'/api/challenge'</span>, { <span class="a">method</span>: <span class="s">'POST'</span>, <span class="a">headers</span>: { <span class="s">'Content-Type'</span>: <span class="s">'application/json'</span> } })</pre>
                     </div>
                 </div>
 
-                <h4 style="margin: 24px 0 12px 0;">Response Example:</h4>
-                <div class="code-box" style="height: auto; min-height: auto;">
-                    <div class="code-wrapper" style="position: relative; padding: 20px;">
-                        <button class="copy-btn" onclick="copyCode(this)" style="position: absolute; top: 10px; right: 10px;">Copy</button>
-                        <div class="code-content active" style="padding: 0; position: static;">
-                            <pre>{ <span class="a">"token"</span>: <span class="s">"785975238a3c4f0c1b0c39ed75e6e4cc..."</span>, <span class="a">"challenge"</span>: { <span class="a">"c"</span>: <span class="s">50</span>, <span class="a">"s"</span>: <span class="s">32</span>, <span class="a">"d"</span>: <span class="s">4</span> }, <span class="a">"expires"</span>: <span class="s">1753924498818</span> }</pre>
-                        </div>
+                <h4 style="margin: 32px 0 16px 0;">Response Example:</h4>
+                <div
+                    style="background: var(--bg-secondary); border: 1px solid var(--border-soft); border-radius: 16px; padding: 20px; position: relative;">
+                    <button class="copy-btn" onclick="copyCode(this)"
+                        style="position: absolute; top: 16px; right: 16px;">Copy</button>
+                    <div class="code-content active" style="padding: 0; display: block; overflow-x: auto;">
+                        <pre>{ <span class="a">"token"</span>: <span class="s">"785975238a3c4f0c1b0c39ed75e6e4cc..."</span>, <span class="a">"challenge"</span>: { <span class="a">"c"</span>: <span class="s">50</span>, <span class="a">"s"</span>: <span class="s">32</span>, <span class="a">"d"</span>: <span class="s">4</span> }, <span class="a">"expires"</span>: <span class="s">1753924498818</span> }</pre>
                     </div>
                 </div>
             </div>
@@ -1012,42 +1018,48 @@ widget.addEventListener(<span class="s">"solve"</span>, <span class="k">async</s
                 <div class="api-header">
                     <span class="method">POST</span>
                     <span class="url">/api/redeem</span>
-                    <span class="url" style="background: var(--accent-soft); color: var(--brand-color);">Verify Solution</span>
+                    <span class="url" style="background: var(--accent-soft); color: var(--brand-color);">Verify
+                        Solution</span>
                 </div>
                 <p>Validates user-submitted CAPTCHA solution and returns verification token for subsequent API calls.
                 </p>
 
-                <div style="background: var(--surface-muted); padding: 20px; border-radius: 12px; margin-bottom: 24px;">
-                    <h4 style="margin: 0 0 12px 0;">Request Parameters:</h4>
-                    <div style="background: var(--accent-soft); color: var(--text-primary); padding: 10px 16px; border-radius: 8px; margin-bottom: 8px; font-family: monospace;">
-                        <strong>token</strong> <em style="opacity: 0.7">(string, required)</em> - Challenge token from /api/challenge
+                <div
+                    style="border: 1px solid var(--border-soft); border-radius: 20px; padding: 24px; margin-top: 32px;">
+                    <h4 style="margin: 0 0 16px 0;">Request Parameters:</h4>
+                    <div
+                        style="background: var(--accent-soft); color: var(--text-primary); padding: 16px 20px; border-radius: 12px; margin-bottom: 12px; font-family: monospace;">
+                        <strong>token</strong> <em style="opacity: 0.6; font-style: italic;">(string, required)</em> -
+                        Challenge token from /api/challenge
                     </div>
-                    <div style="background: var(--accent-soft); color: var(--text-primary); padding: 10px 16px; border-radius: 8px; font-family: monospace;">
-                        <strong>solutions</strong> <em style="opacity: 0.7">(number[], required)</em> - Array of user solution indices
+                    <div
+                        style="background: var(--accent-soft); color: var(--text-primary); padding: 16px 20px; border-radius: 12px; font-family: monospace;">
+                        <strong>solutions</strong> <em style="opacity: 0.6; font-style: italic;">(number[],
+                            required)</em> - Array of user solution indices
                     </div>
                 </div>
 
-                <h4 style="margin: 24px 0 12px 0;">Request Example:</h4>
-                <div class="code-box" style="height: auto; min-height: auto;">
-                    <div class="code-wrapper" style="position: relative; padding: 20px;">
-                        <button class="copy-btn" onclick="copyCode(this)" style="position: absolute; top: 10px; right: 10px;">Copy</button>
-                        <div class="code-content active" style="padding: 0; position: static;">
-                            <pre><span class="k">fetch</span>(<span class="s">'/api/redeem'</span>, { 
+                <h4 style="margin: 32px 0 16px 0;">Request Example:</h4>
+                <div
+                    style="background: var(--bg-secondary); border: 1px solid var(--border-soft); border-radius: 16px; padding: 20px; position: relative;">
+                    <button class="copy-btn" onclick="copyCode(this)"
+                        style="position: absolute; top: 16px; right: 16px;">Copy</button>
+                    <div class="code-content active" style="padding: 0; display: block; overflow-x: auto;">
+                        <pre><span class="k">fetch</span>(<span class="s">'/api/redeem'</span>, { 
   <span class="a">method</span>: <span class="s">'POST'</span>, 
   <span class="a">headers</span>: { <span class="s">'Content-Type'</span>: <span class="s">'application/json'</span> }, 
   <span class="a">body</span>: JSON.stringify({ <span class="a">token</span>: <span class="s">'...'</span>, <span class="a">solutions</span>: [<span class="s">1</span>, <span class="s">3</span>, <span class="s">7</span>] }) 
 })</pre>
-                        </div>
                     </div>
                 </div>
 
-                <h4 style="margin: 24px 0 12px 0;">Response Example:</h4>
-                <div class="code-box" style="height: auto; min-height: auto;">
-                    <div class="code-wrapper" style="position: relative; padding: 20px;">
-                        <button class="copy-btn" onclick="copyCode(this)" style="position: absolute; top: 10px; right: 10px;">Copy</button>
-                        <div class="code-content active" style="padding: 0; position: static;">
-                            <pre>{ <span class="a">"success"</span>: <span class="k">true</span>, <span class="a">"token"</span>: <span class="s">"785975238a3c4f0c..."</span> }</pre>
-                        </div>
+                <h4 style="margin: 32px 0 16px 0;">Response Example:</h4>
+                <div
+                    style="background: var(--bg-secondary); border: 1px solid var(--border-soft); border-radius: 16px; padding: 20px; position: relative;">
+                    <button class="copy-btn" onclick="copyCode(this)"
+                        style="position: absolute; top: 16px; right: 16px;">Copy</button>
+                    <div class="code-content active" style="padding: 0; display: block; overflow-x: auto;">
+                        <pre>{ <span class="a">"success"</span>: <span class="k">true</span>, <span class="a">"token"</span>: <span class="s">"785975238a3c4f0c..."</span> }</pre>
                     </div>
                 </div>
             </div>
@@ -1057,41 +1069,47 @@ widget.addEventListener(<span class="s">"solve"</span>, <span class="k">async</s
                 <div class="api-header">
                     <span class="method">POST</span>
                     <span class="url">/api/validate</span>
-                    <span class="url" style="background: var(--accent-soft); color: var(--brand-color);">Token Validation</span>
+                    <span class="url" style="background: var(--accent-soft); color: var(--brand-color);">Token
+                        Validation</span>
                 </div>
                 <p>Validates previously issued tokens and optionally consumes them for one-time use scenarios.</p>
 
-                <div style="background: var(--surface-muted); padding: 20px; border-radius: 12px; margin-bottom: 24px;">
-                    <h4 style="margin: 0 0 12px 0;">Request Parameters:</h4>
-                    <div style="background: var(--accent-soft); color: var(--text-primary); padding: 10px 16px; border-radius: 8px; margin-bottom: 8px; font-family: monospace;">
-                        <strong>token</strong> <em style="opacity: 0.7">(string, required)</em> - Verification token to validate
+                <div
+                    style="border: 1px solid var(--border-soft); border-radius: 20px; padding: 24px; margin-top: 32px;">
+                    <h4 style="margin: 0 0 16px 0;">Request Parameters:</h4>
+                    <div
+                        style="background: var(--accent-soft); color: var(--text-primary); padding: 16px 20px; border-radius: 12px; margin-bottom: 12px; font-family: monospace;">
+                        <strong>token</strong> <em style="opacity: 0.6; font-style: italic;">(string, required)</em> -
+                        Verification token to validate
                     </div>
-                    <div style="background: var(--accent-soft); color: var(--text-primary); padding: 10px 16px; border-radius: 8px; font-family: monospace;">
-                        <strong>keepToken</strong> <em style="opacity: 0.7">(boolean, optional)</em> - Preserve token for reuse (default: false)
+                    <div
+                        style="background: var(--accent-soft); color: var(--text-primary); padding: 16px 20px; border-radius: 12px; font-family: monospace;">
+                        <strong>keepToken</strong> <em style="opacity: 0.6; font-style: italic;">(boolean,
+                            optional)</em> - Preserve token for reuse (default: false)
                     </div>
                 </div>
 
-                <h4 style="margin: 24px 0 12px 0;">Request Example:</h4>
-                <div class="code-box" style="height: auto; min-height: auto;">
-                    <div class="code-wrapper" style="position: relative; padding: 20px;">
-                        <button class="copy-btn" onclick="copyCode(this)" style="position: absolute; top: 10px; right: 10px;">Copy</button>
-                        <div class="code-content active" style="padding: 0; position: static;">
-                            <pre><span class="k">fetch</span>(<span class="s">'/api/validate'</span>, { 
+                <h4 style="margin: 32px 0 16px 0;">Request Example:</h4>
+                <div
+                    style="background: var(--bg-secondary); border: 1px solid var(--border-soft); border-radius: 16px; padding: 20px; position: relative;">
+                    <button class="copy-btn" onclick="copyCode(this)"
+                        style="position: absolute; top: 16px; right: 16px;">Copy</button>
+                    <div class="code-content active" style="padding: 0; display: block; overflow-x: auto;">
+                        <pre><span class="k">fetch</span>(<span class="s">'/api/validate'</span>, { 
   <span class="a">method</span>: <span class="s">'POST'</span>, 
   <span class="a">headers</span>: { <span class="s">'Content-Type'</span>: <span class="s">'application/json'</span> }, 
   <span class="a">body</span>: JSON.stringify({ <span class="a">token</span>: <span class="s">'...'</span>, <span class="a">keepToken</span>: <span class="k">false</span> }) 
 })</pre>
-                        </div>
                     </div>
                 </div>
 
-                <h4 style="margin: 24px 0 12px 0;">Response Example:</h4>
-                <div class="code-box" style="height: auto; min-height: auto;">
-                    <div class="code-wrapper" style="position: relative; padding: 20px;">
-                        <button class="copy-btn" onclick="copyCode(this)" style="position: absolute; top: 10px; right: 10px;">Copy</button>
-                        <div class="code-content active" style="padding: 0; position: static;">
-                            <pre>{ <span class="a">"success"</span>: <span class="k">true</span> }</pre>
-                        </div>
+                <h4 style="margin: 32px 0 16px 0;">Response Example:</h4>
+                <div
+                    style="background: var(--bg-secondary); border: 1px solid var(--border-soft); border-radius: 16px; padding: 20px; position: relative;">
+                    <button class="copy-btn" onclick="copyCode(this)"
+                        style="position: absolute; top: 16px; right: 16px;">Copy</button>
+                    <div class="code-content active" style="padding: 0; display: block; overflow-x: auto;">
+                        <pre>{ <span class="a">"success"</span>: <span class="k">true</span> }</pre>
                     </div>
                 </div>
             </div>
@@ -1105,34 +1123,37 @@ widget.addEventListener(<span class="s">"solve"</span>, <span class="k">async</s
                 </div>
                 <p>Manually validates and immediately expires (deletes) a token from storage.</p>
 
-                <div style="background: var(--surface-muted); padding: 20px; border-radius: 12px; margin-bottom: 24px;">
-                    <h4 style="margin: 0 0 12px 0;">Request Parameters:</h4>
-                    <div style="background: var(--accent-soft); color: var(--text-primary); padding: 10px 16px; border-radius: 8px; font-family: monospace;">
-                        <strong>token</strong> <em style="opacity: 0.7">(string, required)</em> - Token to delete
+                <div
+                    style="border: 1px solid var(--border-soft); border-radius: 20px; padding: 24px; margin-top: 32px;">
+                    <h4 style="margin: 0 0 16px 0;">Request Parameters:</h4>
+                    <div
+                        style="background: var(--accent-soft); color: var(--text-primary); padding: 16px 20px; border-radius: 12px; font-family: monospace;">
+                        <strong>token</strong> <em style="opacity: 0.6; font-style: italic;">(string, required)</em> -
+                        Token to delete
                     </div>
                 </div>
 
-                <h4 style="margin: 24px 0 12px 0;">Request Example:</h4>
-                <div class="code-box" style="height: auto; min-height: auto;">
-                    <div class="code-wrapper" style="position: relative; padding: 20px;">
-                        <button class="copy-btn" onclick="copyCode(this)" style="position: absolute; top: 10px; right: 10px;">Copy</button>
-                        <div class="code-content active" style="padding: 0; position: static;">
-                            <pre><span class="k">fetch</span>(<span class="s">'/api/delete'</span>, { 
+                <h4 style="margin: 32px 0 16px 0;">Request Example:</h4>
+                <div
+                    style="background: var(--bg-secondary); border: 1px solid var(--border-soft); border-radius: 16px; padding: 20px; position: relative;">
+                    <button class="copy-btn" onclick="copyCode(this)"
+                        style="position: absolute; top: 16px; right: 16px;">Copy</button>
+                    <div class="code-content active" style="padding: 0; display: block; overflow-x: auto;">
+                        <pre><span class="k">fetch</span>(<span class="s">'/api/delete'</span>, { 
   <span class="a">method</span>: <span class="s">'POST'</span>, 
   <span class="a">headers</span>: { <span class="s">'Content-Type'</span>: <span class="s">'application/json'</span> }, 
   <span class="a">body</span>: JSON.stringify({ <span class="a">token</span>: <span class="s">'...'</span> }) 
 })</pre>
-                        </div>
                     </div>
                 </div>
 
-                <h4 style="margin: 24px 0 12px 0;">Response Example:</h4>
-                <div class="code-box" style="height: auto; min-height: auto;">
-                    <div class="code-wrapper" style="position: relative; padding: 20px;">
-                        <button class="copy-btn" onclick="copyCode(this)" style="position: absolute; top: 10px; right: 10px;">Copy</button>
-                        <div class="code-content active" style="padding: 0; position: static;">
-                            <pre>{ <span class="a">"success"</span>: <span class="k">true</span> }</pre>
-                        </div>
+                <h4 style="margin: 32px 0 16px 0;">Response Example:</h4>
+                <div
+                    style="background: var(--bg-secondary); border: 1px solid var(--border-soft); border-radius: 16px; padding: 20px; position: relative;">
+                    <button class="copy-btn" onclick="copyCode(this)"
+                        style="position: absolute; top: 16px; right: 16px;">Copy</button>
+                    <div class="code-content active" style="padding: 0; display: block; overflow-x: auto;">
+                        <pre>{ <span class="a">"success"</span>: <span class="k">true</span> }</pre>
                     </div>
                 </div>
             </div>
@@ -1471,12 +1492,33 @@ cap-widget.hide-label::part(attribution) { display: none !important; }</pre>
 
         // Logic
         const main = document.getElementById('main-cap');
-        if (main) main.addEventListener('solve', (e) => {
+        if (main) main.addEventListener("solve", async (e) => {
             const d = document.getElementById('demo-status');
-            d.innerText = "✅ Verified";
-            d.style.color = "var(--success-color)";
-            d.style.borderColor = "var(--success-color)";
-            document.getElementById('main-wrapper').classList.add('solved');
+            d.innerText = "Verifying...";
+            d.style.color = "var(--text-secondary)";
+
+            try {
+                const res = await fetch('/api/validate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token: e.detail.token, keepToken: false })
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    d.innerText = "✅ Verified";
+                    d.style.color = "var(--success-color)";
+                    d.style.borderColor = "var(--success-color)";
+                    document.getElementById('main-wrapper').classList.add('solved');
+                } else {
+                    throw new Error("Invalid Token");
+                }
+            } catch (err) {
+                d.innerText = "❌ Validation Failed";
+                d.style.color = "var(--error-color)";
+                d.style.borderColor = "var(--error-color)";
+                console.error(err);
+            }
         });
 
         const evt = document.getElementById('event-cap');
