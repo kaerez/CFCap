@@ -5,8 +5,9 @@
   "main": "src/index.js",
   "scripts": {
     "start": "npm run build && wrangler dev",
-    "build": "rm -rf dist && mkdir -p dist && cp -r demo dist/ && cp -r widget dist/",
+    "build": "npm run setup && rm -rf dist && mkdir -p dist && cp -r demo dist/ && cp -r widget dist/",
     "postinstall": "npm run build",
+    "setup": "node scripts/setup.js",
     "deploy": "npm run build && wrangler deploy",
     "cf-typegen": "wrangler types"
   },
