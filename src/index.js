@@ -211,7 +211,7 @@ export default {
       if (pathname === "/api/validate" || pathname === "/api/verify") {
         try {
           const { token } = await request.json();
-          const result = await cap.validateToken(token);
+          const result = await cap.validateToken(token, { keepToken: true });
           return new Response(JSON.stringify(result), {
             headers: {
               "Content-Type": "application/json",
