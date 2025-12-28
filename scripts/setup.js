@@ -42,14 +42,10 @@ buckets.forEach(bucket => {
     runCommand(`npx wrangler r2 bucket lifecycle add ${bucket} --expire-days 1`, `Lifecycle ${bucket}`);
 });
 
-// 2. Secrets
-// We strictly rely on Code Defaults (src/index.js) or Manual Dashboard Text Variables.
-// Users requested "Type: Text", which cannot be easily automated via CLI without 'wrangler.toml' overwrites.
-// Since code has defaults, we don't need to force-create them.
-console.log("\nSecrets configuration rely on code defaults or manual Dashboard Variables.");
-console.log("(See README for optional overrides)");
+// 2. Secrets / Variables
+// Managed via wrangler.toml [vars] (Text) and Dashboard (Secrets).
+// This script strictly handles R2 infrastructure which wrangler.toml can bind but not create.
 
-// ALWAYS exit 0 to allow build to proceed even if setup failed (manual fallback)
-console.log("---------------------------------------------------------");
+console.log("\n---------------------------------------------------------");
 console.log("Setup Attempt Finished. Continuing build...");
 process.exit(0);
