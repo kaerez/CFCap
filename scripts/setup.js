@@ -43,40 +43,11 @@ buckets.forEach(bucket => {
 });
 
 // 2. Secrets
-// Only attempt if we can list them (auth check)
-console.log("\nChecking Secrets...");
-let existingSecrets = [];
-try {
-    const output = execSync("npx wrangler secret list --format json", { encoding: "utf-8", stdio: 'pipe' });
-    if (output) {
-        existingSecrets = JSON.parse(output).map(s => s.name);
-    }
-} catch (e) {
-    console.log("   -> Could not list secrets (Auth required). Skipping secret auto-creation.");
-}
-
-const defaults = {
-    "ALLOWED": "",
-    "CHALLENGE_TTL": "300",
-    "TOKEN_TTL": "330"
-};
-
-// Only iterate if we successfully listed secrets (or we risk blind failures)
-if (existingSecrets.length > 0 || process.env.CLOUDFLARE_API_TOKEN) {
-    for (const [key, val] of Object.entries(defaults)) {
-        if (existingSecrets.includes(key)) {
-            console.log(`[SKIP] Secret '${key}' exists.`);
-        } else {
-            // Try to set
-            try {
-                execSync(`echo "${val}" | npx wrangler secret put ${key}`, { stdio: 'pipe' });
-                console.log(`[CREATE] Set secret '${key}'`);
-            } catch (e) {
-                console.log(`[FAIL] Could not set secret '${key}'`);
-            }
-        }
-    }
-}
+// We strictly rely on Code Defaults (src/index.js) or Manual Dashboard Text Variables.
+// Users requested "Type: Text", which cannot be easily automated via CLI without 'wrangler.toml' overwrites.
+// Since code has defaults, we don't need to force-create them.
+console.log("\nSecrets configuration rely on code defaults or manual Dashboard Variables.");
+console.log("(See README for optional overrides)");
 
 // ALWAYS exit 0 to allow build to proceed even if setup failed (manual fallback)
 console.log("---------------------------------------------------------");
