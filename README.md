@@ -7,7 +7,8 @@ Cap is a lightweight, modern open-source CAPTCHA alternative using [SHA-256 proo
  
 ## Documentation
 
-**[Read the docs](https://capjs.js.org)**, try the [demo](https://cfcap.secops.workers.dev/) or read the [feature comparison](https://capjs.js.org/guide/alternatives.html)
+**[Read the docs](https://capjs.js.org)**, try the [demo](https://cfcap.secops.workers.dev/) or read the [feature comparison](https://capjs.js.org/guide/alternatives.html)  
+Check out speed test using the implementation [Here](https://fast.kalman.co.il).
 
 ## What is Cap?
 
