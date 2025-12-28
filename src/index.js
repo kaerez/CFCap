@@ -8,11 +8,9 @@ import Cap from "@cap.js/server";
 // Helper: Check Access Control
 // Returns true if allowed, false otherwise.
 function checkAccess(request, env) {
-  if (!env.ALLOWED || env.ALLOWED.trim() === "") return true;
-
   // Parse ALLOWED list
   // Strip quotes (single/double) and spaces, split by comma
-  const allowedRaw = env.ALLOWED.replace(/['"]/g, "").split(",");
+  const allowedRaw = (env.ALLOWED || "").replace(/['"]/g, "").split(",");
   const allowedPatterns = allowedRaw.map(s => s.trim()).filter(s => s.length > 0);
 
   if (allowedPatterns.length === 0) return true;
@@ -58,63 +56,60 @@ export default {
     // ---------------------------------------------------------
 
     const cap = new Cap({
+      challengeTTL: Number(env.CHALLENGE_TTL) || 300,
+      tokenTTL: Number(env.TOKEN_TTL) || 330,
       storage: {
         challenges: {
           store: async (token, challengeData) => {
-            await env.DB.prepare(`
-              INSERT OR REPLACE INTO challenges (token, data, expires)
-              VALUES (?, ?, ?)
-            `)
-              .bind(token, JSON.stringify(challengeData), challengeData.expires)
-              .run();
+            // Store metadata for expiration checking
+            await env.R2_CHALLENGES.put(token, JSON.stringify(challengeData), {
+              customMetadata: { expires: String(challengeData.expires) }
+            });
           },
           read: async (token) => {
-            const row = await env.DB.prepare(`
-              SELECT data, expires
-              FROM challenges
-              WHERE token = ?
-                AND expires > ?
-              LIMIT 1
-            `)
-              .bind(token, Date.now())
-              .first();
-            return row
-              ? { challenge: JSON.parse(row.data), expires: Number(row.expires) }
-              : null;
+            const obj = await env.R2_CHALLENGES.get(token);
+            if (!obj) return null;
+
+            // Check expiration
+            const expires = Number(obj.customMetadata.expires);
+            if (Date.now() > expires) {
+              // Optionally delete async to cleanup?
+              // obj.delete(); // No, we'll let lifecycle or lazy delete handle it
+              return null;
+            }
+
+            const data = await obj.json();
+            return { challenge: data, expires: expires };
           },
           delete: async (token) => {
-            await env.DB.prepare(`DELETE FROM challenges WHERE token = ?`).bind(token).run();
+            await env.R2_CHALLENGES.delete(token);
           },
           deleteExpired: async () => {
-            await env.DB.prepare(`DELETE FROM challenges WHERE expires <= ?`).bind(Date.now()).run();
+            // R2 Lifecycle Policy handles this more efficiently
+            // No-op for code compatibility
           },
         },
         tokens: {
           store: async (tokenKey, expires) => {
-            await env.DB.prepare(`
-              INSERT OR REPLACE INTO tokens (key, expires)
-              VALUES (?, ?)
-            `)
-              .bind(tokenKey, expires)
-              .run();
+            await env.R2_TOKENS.put(tokenKey, "valid", {
+              customMetadata: { expires: String(expires) }
+            });
           },
           get: async (tokenKey) => {
-            const row = await env.DB.prepare(`
-              SELECT expires
-              FROM tokens
-              WHERE key = ?
-                AND expires > ?
-              LIMIT 1
-            `)
-              .bind(tokenKey, Date.now())
-              .first();
-            return row ? Number(row.expires) : null;
+            const obj = await env.R2_TOKENS.get(tokenKey);
+            if (!obj) return null;
+
+            const expires = Number(obj.customMetadata.expires);
+            if (Date.now() > expires) return null;
+
+            return expires;
           },
           delete: async (tokenKey) => {
-            await env.DB.prepare(`DELETE FROM tokens WHERE key = ?`).bind(tokenKey).run();
+            await env.R2_TOKENS.delete(tokenKey);
           },
           deleteExpired: async () => {
-            await env.DB.prepare(`DELETE FROM tokens WHERE expires <= ?`).bind(Date.now()).run();
+            // R2 Lifecycle Policy handles this more efficiently
+            // No-op for code compatibility
           },
         },
       },
@@ -162,9 +157,14 @@ export default {
     }
 
     // Serve Demo Page at Root or /demo
-    if (pathname === "/" || pathname === "" || pathname === "/demo" || pathname === "/landing.html") {
+    if (pathname === "/" || pathname === "/landing.html") {
       const assetUrl = new URL("/demo/landing.html", request.url);
-      return env.ASSETS.fetch(new Request(assetUrl, request));
+      const resp = await env.ASSETS.fetch(new Request(assetUrl, request));
+      // Reconstitute response to ensure no 301/302 redirect happens
+      return new Response(resp.body, {
+        status: resp.status,
+        headers: resp.headers
+      });
     }
 
     // C. Default Asset Serving
