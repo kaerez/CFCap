@@ -38,8 +38,9 @@ console.log("Attempting to configure R2 and Secrets...");
 // 1. Buckets & Lifecycle
 buckets.forEach(bucket => {
     runCommand(`npx wrangler r2 bucket create ${bucket}`, `Create ${bucket}`);
-    // Lifecycle: 1 Day retention
-    runCommand(`npx wrangler r2 bucket lifecycle add ${bucket} --expire-days 1`, `Lifecycle ${bucket}`);
+    // Lifecycle: 1 Day retention. Explicitly named "auto-1-day" to ensure command validity.
+    // Syntax: wrangler r2 bucket lifecycle add <bucket> <id> --expire-days <days>
+    runCommand(`npx wrangler r2 bucket lifecycle add ${bucket} auto-1-day --expire-days 1`, `Lifecycle ${bucket}`);
 });
 
 // 2. Secrets / Variables
