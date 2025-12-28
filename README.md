@@ -1,10 +1,47 @@
-# CFCap
-Secure, R2-backed deployment of [Cap](https://github.com/tiagozip/cap) captcha on Cloudflare Workers.
+![Banner](./imgs/banner.png)
+# ![](./imgs/logo-small.webp) Cap
 
-## Features
-- **Secure Access Control**: Domain whitelisting.
-- **R2 Storage**: Serverless, scalable object storage for challenges (1-day auto-expiry).
-- **Configurable TTL**: Customize expiration for challenges (300s) and tokens (330s).
+Cap is a lightweight, modern open-source CAPTCHA alternative using [SHA-256 proof-of-work](https://capjs.js.org/guide/effectiveness.html). It's fast, private, and extremely simple to integrate.
+
+[![Cap widget](./imgs/captcha.svg)](https://cfcap.secops.workers.dev/)
+ 
+## Documentation
+
+**[Read the docs](https://capjs.js.org)**, try the [demo](https://cfcap.secops.workers.dev/) or read the [feature comparison](https://capjs.js.org/guide/alternatives.html)
+
+## What is Cap?
+
+Cap replaces visual captchas with modern, accessible and privacy-preserving [proof-of-work challenges](https://capjs.js.org/guide/effectiveness.html). No images, no tracking, no dependencies, works everywhere.
+
+You can either run it on any JavaScript runtime, or use the standalone mode with Docker. [Learn more about how Cap works](https://capjs.js.org/guide/)
+
+## Why Cap?
+
+- **250x smaller than hCaptcha**  
+  ~20kb, zero dependencies, loads in milliseconds
+
+- **Privacy-first**  
+   Cap doesn't send any telemetry back to our servers
+
+- **Fully customizable**  
+   Change the colors, size, position, icons and more with CSS variables
+
+- **Proof-of-work**  
+   Your users no longer have to waste time solving visual puzzles.
+
+- **Standalone mode**  
+   Run Cap anywhere with a Docker container with analytics & more
+
+- **Invisible**  
+   Hide Cap's widget and solve challenges in the background
+
+- **M2M**  
+   Keep your APIs protected while accessible to friendly robots
+
+- **Open-source**  
+   Completely free & open-source under the Apache 2.0 license
+
+Cap is a great alternative to [reCAPTCHA](https://www.google.com/recaptcha/about/), [hCaptcha](https://www.hcaptcha.com/) and [Cloudflare Turnstile](https://developers.cloudflare.com/turnstile/)
 
 ---
 
@@ -47,7 +84,6 @@ Secure, R2-backed deployment of [Cap](https://github.com/tiagozip/cap) captcha o
 
 The build system will automatically run `npm run setup`, creating your `cap-challenges` and `cap-tokens` buckets with the required **1-Day Lifecycle Rule** to auto-delete old data.
 
-
 ---
 
 ## 2. CLI Based Deployment (Wrangler)
@@ -77,3 +113,16 @@ To verify or change variables for a deploy:
 wrangler vars set ALLOWED "example.com"
 ```
 Or check `wrangler.toml` (note: it does not contain default variables to avoid overwriting your Dashboard settings).
+
+---
+
+## License
+
+This project is licensed under the Apache-2.0 License, please see the [LICENSE](https://github.com/tiagozip/cap/blob/main/LICENSE) file for details.
+
+Copyright ©2025 - present KSEC - Erez Kalman for setup.js, index.js, landing.html, wrangler.toml, package.json  
+Copyright ©2025 - present [tiago](https://tiago.zip)
+
+---
+
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/9920/badge)](https://www.bestpractices.dev/projects/9920) [![](https://data.jsdelivr.com/v1/package/npm/@cap.js/wasm/badge)](https://www.jsdelivr.com/package/npm/@cap.js/wasm)
