@@ -4,6 +4,7 @@
 // =============================================
 
 import Cap from "@cap.js/server";
+import { createHash } from "node:crypto";
 
 // Helper: Check Access Control
 // Returns true if allowed, false otherwise.
@@ -91,9 +92,31 @@ export default {
       });
     }
 
-    // [DEBUG] Health Check - Verification of Worker Startup
+    // [DEBUG] Health Check - Verification of Worker Startup & Capabilities
     if (pathname === "/api/health") {
-      return new Response("OK", { status: 200 });
+      const diag = { status: "OK", checks: {} };
+      try {
+        // Check 1: Crypto
+        const hash = createHash("sha256").update("test").digest("hex");
+        diag.checks.crypto = { status: "ok", result: hash };
+      } catch (e) {
+        diag.checks.crypto = { status: "failed", error: e.message };
+        diag.status = "WARNING";
+      }
+
+      try {
+        // Check 2: R2 Connectivity
+        const list = await env.R2_TOKENS.list({ limit: 1 });
+        diag.checks.r2 = { status: "ok", count: list.objects.length };
+      } catch (e) {
+        diag.checks.r2 = { status: "failed", error: e.message };
+        diag.status = "WARNING";
+      }
+
+      return new Response(JSON.stringify(diag, null, 2), {
+        status: 200,
+        headers: { "Content-Type": "application/json" }
+      });
     }
 
     console.log("DEBUG: Incoming request", request.method, request.url);
