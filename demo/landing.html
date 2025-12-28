@@ -4,15 +4,18 @@ file: demo/landing.html
 ============================================= -->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CFCap - Cloudflare Cap Worker</title>
-    
+
     <!-- FONTS -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
 
     <!-- ASSETS (Deferred) -->
     <script src="/widget/widget.js" type="module" defer></script>
@@ -33,14 +36,14 @@ file: demo/landing.html
             --surface-card: #ffffff;
             --surface-overlay: rgba(255, 255, 255, 0.85);
             --surface-muted: rgba(0, 0, 0, 0.04);
-            
+
             --code-bg: #ffffff;
             --code-text: #24292f;
             --code-border: #e1e4e8;
             --copy-btn-bg: #e5e7eb;
             --copy-btn-hover: #d1d5db;
             --copy-btn-text: #374151;
-            
+
             /* Syntax Highlighting Light */
             --token-tag: #22863a;
             --token-attr: #6f42c1;
@@ -50,7 +53,7 @@ file: demo/landing.html
 
             --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            
+
             --success-color: #34c759;
             --error-color: #ff453a;
         }
@@ -65,7 +68,7 @@ file: demo/landing.html
             --surface-card: #1c1c1e;
             --surface-overlay: #2c2c2e;
             --surface-muted: rgba(235, 235, 245, 0.08);
-            
+
             --code-bg: #161b22;
             --code-text: #c9d1d9;
             --code-border: #30363d;
@@ -81,7 +84,11 @@ file: demo/landing.html
             --accent-soft: rgba(10, 132, 255, 0.24);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
         body {
             font-family: 'Inter', -apple-system, sans-serif;
@@ -91,63 +98,147 @@ file: demo/landing.html
             -webkit-font-smoothing: antialiased;
         }
 
-        .container { max-width: 1400px; margin: 0 auto; padding: 0 20px; }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
 
         .navbar {
-            position: sticky; top: 0; z-index: 100;
+            position: sticky;
+            top: 0;
+            z-index: 100;
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border-light);
         }
-        [data-theme="dark"] .navbar { background: rgba(22, 22, 24, 0.8); }
+
+        [data-theme="dark"] .navbar {
+            background: rgba(22, 22, 24, 0.8);
+        }
 
         .navbar-inner {
-            max-width: 1400px; margin: 0 auto; padding: 12px 20px;
-            display: flex; align-items: center; justify-content: space-between;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
-        .brand { font-weight: 600; color: var(--text-primary); text-decoration: none; font-size: 1.1rem; }
-        
+        .brand {
+            font-weight: 600;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 1.1rem;
+        }
+
         .icon-btn {
-            background: transparent; border: 1px solid var(--border-light);
-            color: var(--text-primary); width: 36px; height: 36px;
-            border-radius: 10px; cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
+            background: transparent;
+            border: 1px solid var(--border-light);
+            color: var(--text-primary);
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             transition: all 0.2s;
         }
-        .icon-btn:hover { background: var(--accent-soft); color: var(--brand-color); }
-        .nav-actions { display: flex; align-items: center; gap: 8px; }
+
+        .icon-btn:hover {
+            background: var(--accent-soft);
+            color: var(--brand-color);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
 
         /* --- HERO --- */
-        .header-section { padding: 60px 0 40px; }
+        .header-section {
+            padding: 60px 0 40px;
+        }
+
         .header-card {
-            display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
-            background: var(--surface-card); border: 1px solid var(--border-light);
-            border-radius: 24px; padding: 48px; margin-bottom: 48px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: var(--surface-card);
+            border: 1px solid var(--border-light);
+            border-radius: 24px;
+            padding: 48px;
+            margin-bottom: 48px;
             box-shadow: var(--shadow-sm);
         }
+
         .header h1 {
-            font-size: 3rem; font-weight: 800; margin: 0 0 16px 0;
+            font-size: 3rem;
+            font-weight: 800;
+            margin: 0 0 16px 0;
             background: linear-gradient(135deg, var(--text-primary) 30%, var(--brand-color) 100%);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            line-height: 1.1; letter-spacing: -0.02em;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
         }
-        .header p { 
-            font-size: 1.2rem; color: var(--text-secondary); 
-            margin: 0 auto; max-width: 750px;
+
+        .header p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin: 0 auto;
+            max-width: 750px;
         }
-        .cta-group { display: flex; gap: 16px; margin-top: 32px; justify-content: center; }
-        
+
+        .cta-group {
+            display: flex;
+            gap: 16px;
+            margin-top: 32px;
+            justify-content: center;
+        }
+
         .btn {
-            padding: 12px 28px; border-radius: 12px; font-weight: 600; font-size: 1rem;
-            cursor: pointer; text-decoration: none; transition: transform 0.1s;
-            display: inline-flex; align-items: center; justify-content: center;
-            min-width: 140px; height: 48px;
+            padding: 12px 28px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            text-decoration: none;
+            transition: transform 0.1s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 140px;
+            height: 48px;
         }
-        .btn.primary { background: var(--brand-color); color: white; border: none; box-shadow: 0 4px 14px rgba(0, 113, 227, 0.3); }
-        .btn.ghost { background: #e5e7eb; color: #1f2937; border: none; }
-        [data-theme="dark"] .btn.ghost { background: #374151; color: #f3f4f6; }
-        .btn:hover { opacity: 0.9; transform: translateY(-1px); }
+
+        .btn.primary {
+            background: var(--brand-color);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 14px rgba(0, 113, 227, 0.3);
+        }
+
+        .btn.ghost {
+            background: #e5e7eb;
+            color: #1f2937;
+            border: none;
+        }
+
+        [data-theme="dark"] .btn.ghost {
+            background: #374151;
+            color: #f3f4f6;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
 
         /* --- CONTENT WRAPPER --- */
         .content {
@@ -163,230 +254,650 @@ file: demo/landing.html
             padding: 56px 64px;
             border-bottom: 1px solid var(--border-soft);
         }
-        .section:last-child { border-bottom: none; }
-        .section h2 { font-size: 2.2rem; font-weight: 700; margin-bottom: 16px; letter-spacing: -0.02em; color: var(--text-primary); }
-        .section > p { font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 32px; }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        .section h2 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+            color: var(--text-primary);
+        }
+
+        .section>p {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+        }
 
         /* --- LIVE DEMO --- */
         .live-demo-card {
-            background: var(--surface-card); 
-            border-radius: 24px; padding: 40px;
-            border: 1px solid var(--border-light); display: flex; flex-direction: column; gap: 24px;
+            background: var(--surface-card);
+            border-radius: 24px;
+            padding: 40px;
+            border: 1px solid var(--border-light);
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
         }
-        [data-theme="dark"] .live-demo-card { background: #1f2937; }
-        
-        .live-demo-header h2 { font-size: 2rem; margin: 0 0 8px 0; color: var(--text-primary); }
-        .live-demo-header p { font-size: 1.1rem; color: var(--text-secondary); margin: 0; }
+
+        [data-theme="dark"] .live-demo-card {
+            background: #1f2937;
+        }
+
+        .live-demo-header h2 {
+            font-size: 2rem;
+            margin: 0 0 8px 0;
+            color: var(--text-primary);
+        }
+
+        .live-demo-header p {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin: 0;
+        }
 
         .demo-container {
-            display: grid; grid-template-columns: 1fr 1fr;
-            background: var(--surface-card); border-radius: 16px; overflow: hidden;
-            min-height: 480px; box-shadow: var(--shadow-sm); width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background: var(--surface-card);
+            border-radius: 16px;
+            overflow: hidden;
+            min-height: 480px;
+            box-shadow: var(--shadow-sm);
+            width: 100%;
         }
+
         .demo-widget {
             background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%);
-            padding: 40px; display: flex; flex-direction: column; align-items: center; justify-content: center;
-            border-right: 1px solid var(--border-soft); position: relative; min-width: 0; flex: 1 1 0;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-right: 1px solid var(--border-soft);
+            position: relative;
+            min-width: 0;
+            flex: 1 1 0;
         }
-        [data-theme="dark"] .demo-widget { background: linear-gradient(135deg, #0c4a6e 0%, #082f49 100%); }
-        .demo-code { background: var(--code-bg); display: flex; flex-direction: column; height: 100%; min-width: 0; width: 100%; flex: 1 1 0; }
+
+        [data-theme="dark"] .demo-widget {
+            background: linear-gradient(135deg, #0c4a6e 0%, #082f49 100%);
+        }
+
+        .demo-code {
+            background: var(--code-bg);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            min-width: 0;
+            width: 100%;
+            flex: 1 1 0;
+        }
 
         /* --- TABS --- */
-        .tabs { 
-            display: flex; align-items: center;
-            border-bottom: 1px solid var(--code-border); background: var(--code-bg);
-            padding: 0 16px; height: 50px; flex-shrink: 0;
+        .tabs {
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid var(--code-border);
+            background: var(--code-bg);
+            padding: 0 16px;
+            height: 50px;
+            flex-shrink: 0;
         }
-        .tab-btn {
-            padding: 0 20px; height: 100%; background: transparent; border: none;
-            color: var(--text-secondary); cursor: pointer; font-weight: 500; font-size: 0.9rem;
-            border-bottom: 2px solid transparent; margin-right: 8px;
-        }
-        .tab-btn.active { color: var(--text-primary); border-bottom-color: var(--brand-color); }
-        
-        .copy-btn {
-            margin-left: auto; background: var(--copy-btn-bg); border: 1px solid var(--code-border); 
-            color: var(--copy-btn-text); padding: 6px 16px; border-radius: 6px; font-size: 0.8rem;
-            cursor: pointer; transition: all 0.2s; font-weight: 600;
-        }
-        .copy-btn:hover { background: var(--copy-btn-hover); border-color: var(--border-light); }
 
-        .code-wrapper { flex-grow: 1; position: relative; overflow: hidden; }
-        .code-content { 
-            display: none; padding: 24px; overflow: auto; 
-            width: 100%; height: 100%; box-sizing: border-box;
-            position: absolute; top: 0; left: 0;
+        .tab-btn {
+            padding: 0 20px;
+            height: 100%;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.9rem;
+            border-bottom: 2px solid transparent;
+            margin-right: 8px;
         }
-        .code-content.active { display: block; }
-        pre { margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--code-text); line-height: 1.6; }
+
+        .tab-btn.active {
+            color: var(--text-primary);
+            border-bottom-color: var(--brand-color);
+        }
+
+        .copy-btn {
+            margin-left: auto;
+            background: var(--copy-btn-bg);
+            border: 1px solid var(--code-border);
+            color: var(--copy-btn-text);
+            padding: 6px 16px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 600;
+        }
+
+        .copy-btn:hover {
+            background: var(--copy-btn-hover);
+            border-color: var(--border-light);
+        }
+
+        .code-wrapper {
+            flex-grow: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .code-content {
+            display: none;
+            padding: 24px;
+            overflow: auto;
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .code-content.active {
+            display: block;
+        }
+
+        pre {
+            margin: 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--code-text);
+            line-height: 1.6;
+        }
 
         /* --- STROBE & BRANDING --- */
-        .widget-wrapper { position: relative; border-radius: 14px; overflow: hidden; display: inline-block; }
+        .widget-wrapper {
+            position: relative;
+            border-radius: 14px;
+            overflow: hidden;
+            display: inline-block;
+        }
+
         .widget-wrapper::after {
-            content: ""; position: absolute; inset: 0;
-            background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.4) 50%, transparent 70%);
-            background-size: 200% 100%; animation: strobe 2.5s infinite linear;
-            pointer-events: none; z-index: 10;
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(110deg, transparent 30%, rgba(255, 255, 255, 0.4) 50%, transparent 70%);
+            background-size: 200% 100%;
+            animation: strobe 2.5s infinite linear;
+            pointer-events: none;
+            z-index: 10;
         }
-        .widget-wrapper.solved::after { display: none; }
-        @keyframes strobe { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
 
-        .branding-overlay { position: relative; display: inline-block; }
+        .widget-wrapper.solved::after {
+            display: none;
+        }
+
+        @keyframes strobe {
+            0% {
+                background-position: 100% 0;
+            }
+
+            100% {
+                background-position: -100% 0;
+            }
+        }
+
+        .branding-overlay {
+            position: relative;
+            display: inline-block;
+        }
+
         .branding-overlay::before {
-            content: "CFCap"; position: absolute; bottom: 12px; right: 12px;
-            font-size: 10px; color: #999; background: var(--cap-background, #fdfdfd); 
-            padding-left: 4px; pointer-events: none; z-index: 5; font-family: system-ui, sans-serif;
+            content: "CFCap";
+            position: absolute;
+            bottom: 12px;
+            right: 12px;
+            font-size: 10px;
+            color: #999;
+            background: var(--cap-background, #fdfdfd);
+            padding-left: 4px;
+            pointer-events: none;
+            z-index: 5;
+            font-family: system-ui, sans-serif;
         }
-        [data-theme="dark"] .branding-overlay::before { background: #111; color: #888; }
-        cap-widget a { display: none !important; }
 
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+        [data-theme="dark"] .branding-overlay::before {
+            background: #111;
+            color: #888;
+        }
+
+        cap-widget.hide-label::part(attribution) {
+            display: none !important;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
         .custom-card {
-            background: var(--bg-secondary); border: 1px solid var(--border-color);
-            border-radius: 16px; overflow: hidden; display: flex; flex-direction: column;
-            height: 100%; min-width: 0;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            min-width: 0;
         }
+
         .custom-preview {
-            padding: 40px 20px; display: flex; justify-content: center;
-            align-items: center; border-bottom: 1px solid var(--border-color);
-            background: var(--surface-card); height: 200px; flex-shrink: 0; 
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            background: var(--surface-card);
+            height: 200px;
+            flex-shrink: 0;
         }
+
         .custom-card h4 {
-            padding: 16px 20px 0; margin: 0; font-size: 0.9rem;
-            text-transform: uppercase; color: var(--text-secondary); background: var(--surface-card);
+            padding: 16px 20px 0;
+            margin: 0;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            background: var(--surface-card);
         }
+
         .code-box {
-            background: var(--code-bg); border-top: 1px solid var(--border-color); 
-            flex-grow: 1; position: relative; display: flex; flex-direction: column;
-            height: 300px; width: 100%;
+            background: var(--code-bg);
+            border-top: 1px solid var(--border-color);
+            flex-grow: 1;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            height: 300px;
+            width: 100%;
         }
 
-        .preview-dark { background: #1a1a1a !important; }
-        cap-widget.custom-dark { --cap-background: #111; --cap-border-color: #333; --cap-color: #fff; --cap-spinner-color: #0a84ff; --cap-checkbox-background: #222; }
-        .custom-dark.branding-overlay::before { background: #111; color: #888; }
+        .preview-dark {
+            background: #1a1a1a !important;
+        }
 
-        cap-widget.hide-label { --cap-font-size: 0px !important; font-size: 0px !important; }
-        .preview-kitchen { background: #1e1e24 !important; }
-        cap-widget.custom-kitchen { --cap-border-radius: 0px !important; --cap-color: #2cb67d !important; --cap-background: #1e1e24 !important; --cap-border-color: #2cb67d !important; --cap-font: 'Courier New', monospace !important; --cap-checkbox-size: 30px !important; }
-        .custom-kitchen.branding-overlay::before { background: #1e1e24; color: #888; }
+        cap-widget.custom-dark {
+            --cap-background: #111;
+            --cap-border-color: #333;
+            --cap-color: #fff;
+            --cap-spinner-color: #0a84ff;
+            --cap-checkbox-background: #222;
+        }
 
-        .terminal { background: #0d1117; border-radius: 12px; color: #3fb950; font-family: monospace; padding: 16px; height: 200px; overflow-y: auto; display: flex; flex-direction: column-reverse; word-break: break-all; }
-        .float-header { padding: 16px 20px; border-bottom: 1px solid var(--border-color); background: var(--surface-card); display: flex; justify-content: space-between; align-items: center; }
-        .float-header h4 { margin: 0; padding: 0; background: transparent; }
-        .float-btn { padding: 8px 16px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; }
-        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 32px; margin-top: 36px; }
-        .feature-card { background: var(--surface-card); padding: 36px 32px; border-radius: 28px; border: 1px solid var(--border-soft); transition: transform 0.2s; }
-        .feature-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-sm); }
-        .feature-card h3 { font-size: 1.3rem; margin-bottom: 14px; color: var(--text-primary); }
-        .feature-card p { font-size: 1rem; color: var(--text-secondary); margin: 0; line-height: 1.6; }
-        .usage-flow { counter-reset: step; list-style: none; margin-top: 24px; }
-        .usage-flow li { position: relative; padding: 24px 32px 24px 64px; margin-bottom: 20px; background: var(--surface-card); border-radius: 24px; border: 1px solid var(--border-soft); }
-        .usage-flow li::before { content: counter(step); counter-increment: step; position: absolute; left: 20px; top: 50%; transform: translateY(-50%); width: 32px; height: 32px; background: var(--accent-soft); color: var(--brand-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.95rem; }
-        .error-list { list-style: none; margin-top: 20px; }
-        .error-list li { padding: 16px 24px; margin-bottom: 12px; background: var(--surface-card); border-radius: 18px; border: 1px solid var(--border-soft); transition: border-color 0.2s; }
-        .error-list li:hover { border-color: var(--error-color); }
-        .error-list strong { color: var(--error-color); font-weight: 600; }
-        .api-endpoint { background: var(--surface-card); border-radius: 28px; padding: 40px; margin-bottom: 32px; border: 1px solid var(--border-soft); }
-        .api-header { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; flex-wrap: wrap; }
-        .method { background: var(--accent-soft); color: var(--brand-color); padding: 6px 16px; border-radius: 99px; font-weight: 700; font-size: 0.85rem; }
-        .url { font-family: 'JetBrains Mono', monospace; background: var(--surface-muted); padding: 6px 16px; border-radius: 99px; font-size: 0.95rem; color: var(--text-primary); border: 1px solid var(--border-soft); }
-        #toast { visibility: hidden; min-width: 200px; background: var(--surface-overlay); color: var(--text-primary); text-align: center; border-radius: 50px; padding: 12px 24px; position: fixed; z-index: 1000; left: 50%; bottom: 30px; transform: translateX(-50%) translateY(20px); opacity: 0; transition: all 0.3s; box-shadow: 0 8px 30px rgba(0,0,0,0.12); border: 1px solid var(--border-light); backdrop-filter: blur(10px); font-weight: 500; }
-        #toast.show { visibility: visible; opacity: 1; transform: translateX(-50%) translateY(0); }
-        .k { color: var(--token-keyword); } .s { color: var(--token-string); } .c { color: var(--token-comment); } .t { color: var(--token-tag); } .a { color: var(--token-attr); }
-        
+        .custom-dark.branding-overlay::before {
+            background: #111;
+            color: #888;
+        }
+
+        cap-widget.hide-label {
+            --cap-font-size: 0px !important;
+            font-size: 0px !important;
+        }
+
+        .preview-kitchen {
+            background: #1e1e24 !important;
+        }
+
+        cap-widget.custom-kitchen {
+            --cap-border-radius: 0px !important;
+            --cap-color: #2cb67d !important;
+            --cap-background: #1e1e24 !important;
+            --cap-border-color: #2cb67d !important;
+            --cap-font: 'Courier New', monospace !important;
+            --cap-checkbox-size: 30px !important;
+        }
+
+        .custom-kitchen.branding-overlay::before {
+            background: #1e1e24;
+            color: #888;
+        }
+
+        .terminal {
+            background: #0d1117;
+            border-radius: 12px;
+            color: #3fb950;
+            font-family: monospace;
+            padding: 16px;
+            height: 200px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column-reverse;
+            word-break: break-all;
+        }
+
+        .float-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-color);
+            background: var(--surface-card);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .float-header h4 {
+            margin: 0;
+            padding: 0;
+            background: transparent;
+        }
+
+        .float-btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 32px;
+            margin-top: 36px;
+        }
+
+        .feature-card {
+            background: var(--surface-card);
+            padding: 36px 32px;
+            border-radius: 28px;
+            border: 1px solid var(--border-soft);
+            transition: transform 0.2s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .feature-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 14px;
+            color: var(--text-primary);
+        }
+
+        .feature-card p {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        .usage-flow {
+            counter-reset: step;
+            list-style: none;
+            margin-top: 24px;
+        }
+
+        .usage-flow li {
+            position: relative;
+            padding: 24px 32px 24px 64px;
+            margin-bottom: 20px;
+            background: var(--surface-card);
+            border-radius: 24px;
+            border: 1px solid var(--border-soft);
+        }
+
+        .usage-flow li::before {
+            content: counter(step);
+            counter-increment: step;
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 32px;
+            height: 32px;
+            background: var(--accent-soft);
+            color: var(--brand-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        .error-list {
+            list-style: none;
+            margin-top: 20px;
+        }
+
+        .error-list li {
+            padding: 16px 24px;
+            margin-bottom: 12px;
+            background: var(--surface-card);
+            border-radius: 18px;
+            border: 1px solid var(--border-soft);
+            transition: border-color 0.2s;
+        }
+
+        .error-list li:hover {
+            border-color: var(--error-color);
+        }
+
+        .error-list strong {
+            color: var(--error-color);
+            font-weight: 600;
+        }
+
+        .api-endpoint {
+            background: var(--surface-card);
+            border-radius: 28px;
+            padding: 40px;
+            margin-bottom: 32px;
+            border: 1px solid var(--border-soft);
+        }
+
+        .api-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .method {
+            background: var(--accent-soft);
+            color: var(--brand-color);
+            padding: 6px 16px;
+            border-radius: 99px;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+
+        .url {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--surface-muted);
+            padding: 6px 16px;
+            border-radius: 99px;
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            border: 1px solid var(--border-soft);
+        }
+
+        #toast {
+            visibility: hidden;
+            min-width: 200px;
+            background: var(--surface-overlay);
+            color: var(--text-primary);
+            text-align: center;
+            border-radius: 50px;
+            padding: 12px 24px;
+            position: fixed;
+            z-index: 1000;
+            left: 50%;
+            bottom: 30px;
+            transform: translateX(-50%) translateY(20px);
+            opacity: 0;
+            transition: all 0.3s;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+            border: 1px solid var(--border-light);
+            backdrop-filter: blur(10px);
+            font-weight: 500;
+        }
+
+        #toast.show {
+            visibility: visible;
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .k {
+            color: var(--token-keyword);
+        }
+
+        .s {
+            color: var(--token-string);
+        }
+
+        .c {
+            color: var(--token-comment);
+        }
+
+        .t {
+            color: var(--token-tag);
+        }
+
+        .a {
+            color: var(--token-attr);
+        }
+
         @media (max-width: 768px) {
-            .demo-container, .grid-2, .feature-grid { grid-template-columns: 1fr; }
-            .header-card { padding: 32px; }
-            .header h1 { font-size: 2.5rem; }
+
+            .demo-container,
+            .grid-2,
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header-card {
+                padding: 32px;
+            }
+
+            .header h1 {
+                font-size: 2.5rem;
+            }
         }
-        .footer { text-align: center; color: var(--text-secondary); padding-bottom: 40px; font-size: 0.9rem; margin-top: 60px; }
+
+        .footer {
+            text-align: center;
+            color: var(--text-secondary);
+            padding-bottom: 40px;
+            font-size: 0.9rem;
+            margin-top: 60px;
+        }
     </style>
 </head>
+
 <body data-theme="light">
 
-<nav class="navbar">
-    <div class="navbar-inner">
-        <a href="#" class="brand">CFCap - Cap Worker</a>
-        <div class="nav-actions">
-            <!-- GitHub Icon First -->
-            <a href="https://github.com/kaerez/cfcap" target="_blank" class="icon-btn" aria-label="GitHub">
-                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.58 2 12.26c0 4.51 2.87 8.33 6.85 9.69.5.09.68-.22.68-.49 0-.24-.01-.87-.01-1.71-2.78.62-3.37-1.37-3.37-1.37-.45-1.17-1.11-1.48-1.11-1.48-.91-.64.07-.63.07-.63 1 .07 1.53 1.06 1.53 1.06.9 1.57 2.36 1.12 2.93.85.09-.67.35-1.12.63-1.38-2.22-.26-4.56-1.13-4.56-5.04 0-1.11.39-2.01 1.03-2.72-.1-.26-.45-1.3.1-2.71 0 0 .85-.28 2.78 1.04A9.36 9.36 0 0112 6.84c.86 0 1.73.12 2.54.34 1.93-1.32 2.78-1.04 2.78-1.04.55 1.41.2 2.45.1 2.71.64.71 1.03 1.61 1.03 2.72 0 3.92-2.34 4.77-4.57 5.03.36.32.68.95.68 1.92 0 1.39-.01 2.51-.01 2.86 0 .27.18.58.69.48A10.05 10.05 0 0022 12.26C22 6.58 17.52 2 12 2z"></path></svg>
-            </a>
-            <!-- Theme Toggle Second -->
-            <button id="themeToggle" class="icon-btn">
-                <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
-                <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20" style="display:none;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-            </button>
+    <nav class="navbar">
+        <div class="navbar-inner">
+            <a href="#" class="brand">CFCap - Cap Worker</a>
+            <div class="nav-actions">
+                <!-- GitHub Icon First -->
+                <a href="https://github.com/kaerez/cfcap" target="_blank" class="icon-btn" aria-label="GitHub">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M12 2C6.48 2 2 6.58 2 12.26c0 4.51 2.87 8.33 6.85 9.69.5.09.68-.22.68-.49 0-.24-.01-.87-.01-1.71-2.78.62-3.37-1.37-3.37-1.37-.45-1.17-1.11-1.48-1.11-1.48-.91-.64.07-.63.07-.63 1 .07 1.53 1.06 1.53 1.06.9 1.57 2.36 1.12 2.93.85.09-.67.35-1.12.63-1.38-2.22-.26-4.56-1.13-4.56-5.04 0-1.11.39-2.01 1.03-2.72-.1-.26-.45-1.3.1-2.71 0 0 .85-.28 2.78 1.04A9.36 9.36 0 0112 6.84c.86 0 1.73.12 2.54.34 1.93-1.32 2.78-1.04 2.78-1.04.55 1.41.2 2.45.1 2.71.64.71 1.03 1.61 1.03 2.72 0 3.92-2.34 4.77-4.57 5.03.36.32.68.95.68 1.92 0 1.39-.01 2.51-.01 2.86 0 .27.18.58.69.48A10.05 10.05 0 0022 12.26C22 6.58 17.52 2 12 2z">
+                        </path>
+                    </svg>
+                </a>
+                <!-- Theme Toggle Second -->
+                <button id="themeToggle" class="icon-btn">
+                    <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20"
+                        height="20">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20"
+                        height="20" style="display:none;">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </button>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
 
-<div class="container">
-    <div class="header-section">
-        <div class="header-card">
-            <div class="header-content">
-                <div class="header">
-                    <h1>CFCap - Cloudflare Cap Worker</h1>
-                    <!-- Non-breaking space used to keep 'a Cloudflare Worker' together -->
-                    <p>Next-generation, privacy-first CAPTCHA service powered by a Cloudflare&nbsp;Worker.</p>
-                    <div class="cta-group">
-                        <a href="#demo" class="btn primary">Get Started</a>
-                        <a href="#api" class="btn ghost">API Docs</a>
+    <div class="container">
+        <div class="header-section">
+            <div class="header-card">
+                <div class="header-content">
+                    <div class="header">
+                        <h1>CFCap - Cloudflare Cap Worker</h1>
+                        <!-- Non-breaking space used to keep 'a Cloudflare Worker' together -->
+                        <p>Next-generation, privacy-first CAPTCHA service powered by a Cloudflare&nbsp;Worker.</p>
+                        <div class="cta-group">
+                            <a href="#demo" class="btn primary">Get Started</a>
+                            <a href="#api" class="btn ghost">API Docs</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- LIVE DEMO -->
-    <div class="live-demo-card" id="demo">
-        <div class="live-demo-header">
-            <h2>Live Demo</h2>
-            <p>Try the interactive widget below.</p>
-        </div>
-        
-        <div class="demo-container">
-            <div class="demo-widget">
-                <div class="widget-wrapper branding-overlay" id="main-wrapper">
-                    <cap-widget 
-                        id="main-cap" 
-                        data-cap-api-endpoint="/api/" 
-                        data-cap-worker-count="4">
-                    </cap-widget>
-                </div>
-                <div id="demo-status" class="demo-status">Verify to continue</div>
+        <!-- LIVE DEMO -->
+        <div class="live-demo-card" id="demo">
+            <div class="live-demo-header">
+                <h2>Live Demo</h2>
+                <p>Try the interactive widget below.</p>
             </div>
-            <div class="demo-code">
-                <div class="tabs">
-                    <div class="tab-list">
-                        <button class="tab-btn active" onclick="setTab('main', 0)">HTML</button>
-                        <button class="tab-btn" onclick="setTab('main', 1)">JavaScript</button>
-                        <button class="tab-btn" onclick="setTab('main', 2)">CSS</button>
+
+            <div class="demo-container">
+                <div class="demo-widget">
+                    <div class="widget-wrapper branding-overlay" id="main-wrapper">
+                        <cap-widget id="main-cap" data-cap-api-endpoint="/api/" data-cap-worker-count="4">
+                        </cap-widget>
                     </div>
-                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    <div id="demo-status" class="demo-status">Verify to continue</div>
                 </div>
-                
-                <div class="code-wrapper">
-                    <div id="main-0" class="code-content active">
-<pre>&lt;<span class="t">script</span> <span class="a">src</span>=<span class="s">"/widget.js"</span> <span class="a">type</span>=<span class="s">"module"</span>&gt;&lt;/<span class="t">script</span>&gt;
+                <div class="demo-code">
+                    <div class="tabs">
+                        <div class="tab-list">
+                            <button class="tab-btn active" onclick="setTab('main', 0)">HTML</button>
+                            <button class="tab-btn" onclick="setTab('main', 1)">JavaScript</button>
+                            <button class="tab-btn" onclick="setTab('main', 2)">CSS</button>
+                        </div>
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                    </div>
+
+                    <div class="code-wrapper">
+                        <div id="main-0" class="code-content active">
+                            <pre>&lt;<span class="t">script</span> <span class="a">src</span>=<span class="s">"/widget.js"</span> <span class="a">type</span>=<span class="s">"module"</span>&gt;&lt;/<span class="t">script</span>&gt;
 
 &lt;<span class="t">cap-widget</span> 
   <span class="a">data-cap-api-endpoint</span>=<span class="s">"/api/"</span>
   <span class="a">data-cap-worker-count</span>=<span class="s">"4"</span>&gt;
 &lt;/<span class="t">cap-widget</span>&gt;</pre>
-                    </div>
+                        </div>
 
-                    <div id="main-1" class="code-content">
-<pre><span class="k">const</span> widget = document.querySelector(<span class="s">"cap-widget"</span>);
+                        <div id="main-1" class="code-content">
+                            <pre><span class="k">const</span> widget = document.querySelector(<span class="s">"cap-widget"</span>);
 
 widget.addEventListener(<span class="s">"solve"</span>, <span class="k">async</span> (e) => {
   <span class="k">const</span> token = e.detail.token;
   <span class="c">// Verify with backend...</span>
 });</pre>
-                    </div>
-                    
-                    <div id="main-2" class="code-content">
-<pre><span class="c">/* CSS for Branding Overlay & Strobe */</span>
+                        </div>
+
+                        <div id="main-2" class="code-content">
+                            <pre><span class="c">/* CSS for Branding Overlay & Strobe */</span>
 <span class="k">.branding-overlay</span> { 
   <span class="a">position</span>: <span class="s">relative</span>; 
   <span class="a">display</span>: <span class="s">inline-block</span>; 
@@ -406,151 +917,160 @@ widget.addEventListener(<span class="s">"solve"</span>, <span class="k">async</s
   <span class="a">0%</span> { <span class="a">background-position</span>: <span class="s">100% 0</span>; }
   <span class="a">100%</span> { <span class="a">background-position</span>: <span class="s">-100% 0</span>; }
 }</pre>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- SERVICE OVERVIEW -->
-    <div class="section">
-        <h2>Service Overview</h2>
-        <div class="feature-grid">
-            <div class="feature-card">
-                <h3 data-icon="🚀">Ultra Performance</h3>
-                <p>Edge-deployed across 250+ cities worldwide with sub-100ms response times and automatic scaling</p>
-            </div>
-            <div class="feature-card">
-                <h3 data-icon="🔒">Enterprise Security</h3>
-                <p>Military-grade encryption with advanced bot detection algorithms and fraud prevention</p>
-            </div>
-            <div class="feature-card">
-                <h3 data-icon="🎯">Developer First</h3>
-                <p>Simple RESTful API with comprehensive customization options</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- INTEGRATION GUIDE -->
-    <div class="section">
-        <h2>Integration Guide</h2>
-        <ol class="usage-flow">
-            <li><strong>Generate Challenge</strong>: Request a new CAPTCHA via <code>/api/challenge</code> endpoint</li>
-            <li><strong>Render UI</strong>: Display the challenge content in your frontend using our SDK or custom implementation</li>
-            <li><strong>Collect Solution</strong>: Capture user interaction and prepare solution array</li>
-            <li><strong>Verify Response</strong>: Submit solution via <code>/api/redeem</code> for server-side validation</li>
-            <li><strong>Token Usage</strong>: Use returned token for protected operations via <code>/api/validate</code></li>
-        </ol>
-    </div>
-
-    <!-- ERROR HANDLING -->
-    <div class="section">
-        <h2>Error Handling</h2>
-        <p>Our API follows REST conventions with detailed error responses and appropriate HTTP status codes:</p>
-        <ul class="error-list">
-            <li><strong>400 Bad Request</strong>: Malformed request body or missing required parameters</li>
-            <li><strong>401 Unauthorized</strong>: Invalid or expired authentication credentials</li>
-            <li><strong>404 Not Found</strong>: Requested endpoint or resource doesn't exist</li>
-            <li><strong>429 Too Many Requests</strong>: Rate limit exceeded, retry with exponential backoff</li>
-            <li><strong>500 Internal Server Error</strong>: Temporary server issue, safe to retry</li>
-        </ul>
-    </div>
-    
-    <!-- API REFERENCE -->
-    <div class="section" id="api">
-        <h2>API Reference</h2>
-        
-        <div class="api-endpoint">
-            <div class="api-header">
-                <span class="method">POST</span>
-                <span class="url">/api/challenge</span>
-            </div>
-            <p>Creates a new CAPTCHA challenge with cryptographically secure tokens and returns challenge data for client rendering.</p>
-        </div>
-
-        <div class="api-endpoint">
-            <div class="api-header">
-                <span class="method">POST</span>
-                <span class="url">/api/redeem</span>
-            </div>
-            <p>Validates user-submitted CAPTCHA solution and returns verification token for subsequent API calls.</p>
-        </div>
-
-        <div class="api-endpoint">
-            <div class="api-header">
-                <span class="method">POST</span>
-                <span class="url">/api/validate</span>
-            </div>
-            <p>Validates previously issued tokens and optionally consumes them for one-time use scenarios.</p>
-        </div>
-    </div>
-    
-    <!-- EVENTS -->
-    <div class="section">
-        <h2>Event Handling</h2>
-        <div class="demo-container">
-            <div class="demo-widget" style="background: var(--surface-overlay);">
-                <div class="widget-wrapper branding-overlay">
-                    <cap-widget id="event-cap" data-cap-api-endpoint="/api/"></cap-widget>
+        <!-- SERVICE OVERVIEW -->
+        <div class="section">
+            <h2>Service Overview</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3 data-icon="🚀">Ultra Performance</h3>
+                    <p>Edge-deployed across 250+ cities worldwide with sub-100ms response times and automatic scaling
+                    </p>
                 </div>
-                <button class="btn ghost" style="margin-top:20px;" onclick="document.getElementById('event-cap').reset()">Reset Widget</button>
-            </div>
-            <div class="demo-code">
-                 <div class="tabs">
-                    <div class="tab-list">
-                        <button class="tab-btn active" onclick="setTab('event', 0)">HTML</button>
-                        <button class="tab-btn" onclick="setTab('event', 1)">JavaScript</button>
-                        <button class="tab-btn" onclick="setTab('event', 2)">CSS</button>
-                    </div>
-                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <div class="feature-card">
+                    <h3 data-icon="🔒">Enterprise Security</h3>
+                    <p>Military-grade encryption with advanced bot detection algorithms and fraud prevention</p>
                 </div>
-                
-                <div class="code-wrapper">
-                    <div id="event-0" class="code-content active">
-<pre>&lt;<span class="t">cap-widget</span> <span class="a">id</span>=<span class="s">"event-cap"</span>&gt;&lt;/<span class="t">cap-widget</span>&gt;</pre>
-                    </div>
-                    
-                    <div id="event-1" class="code-content">
-<pre><span class="k">const</span> w = document.getElementById(<span class="s">"event-cap"</span>);
-
-w.addEventListener(<span class="s">"solve"</span>, <span class="k">e</span> => console.log(<span class="s">"Token:"</span>, e.detail));
-w.addEventListener(<span class="s">"error"</span>, <span class="k">e</span> => console.error(<span class="s">"Error:"</span>, e.detail));</pre>
-                    </div>
-                    <div id="event-2" class="code-content">
-<pre><span class="c">/* CSS for Branding Overlay */</span>
-<span class="k">.branding-overlay::before</span> { <span class="a">content</span>: <span class="s">"CFCap"</span>; ... }</pre>
-                    </div>
-                </div>
-                <div class="terminal" id="event-log" style="border-top: 1px solid var(--border-light); margin-top: auto; border-radius: 0; min-height: 100px;">
-                    <div>System Ready...</div>
+                <div class="feature-card">
+                    <h3 data-icon="🎯">Developer First</h3>
+                    <p>Simple RESTful API with comprehensive customization options</p>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- CUSTOMIZATION -->
-    <div class="section">
-        <h2>Customization</h2>
-        <div class="grid-2">
-            <!-- Dark Theme -->
-            <div class="custom-card">
-                <h4>Dark Theme</h4>
-                <div class="custom-preview preview-dark">
-                    <div class="widget-wrapper branding-overlay custom-dark">
-                        <cap-widget class="custom-dark" data-cap-api-endpoint="/api/"></cap-widget>
-                    </div>
+        <!-- INTEGRATION GUIDE -->
+        <div class="section">
+            <h2>Integration Guide</h2>
+            <ol class="usage-flow">
+                <li><strong>Generate Challenge</strong>: Request a new CAPTCHA via <code>/api/challenge</code> endpoint
+                </li>
+                <li><strong>Render UI</strong>: Display the challenge content in your frontend using our SDK or custom
+                    implementation</li>
+                <li><strong>Collect Solution</strong>: Capture user interaction and prepare solution array</li>
+                <li><strong>Verify Response</strong>: Submit solution via <code>/api/redeem</code> for server-side
+                    validation</li>
+                <li><strong>Token Usage</strong>: Use returned token for protected operations via
+                    <code>/api/validate</code></li>
+            </ol>
+        </div>
+
+        <!-- ERROR HANDLING -->
+        <div class="section">
+            <h2>Error Handling</h2>
+            <p>Our API follows REST conventions with detailed error responses and appropriate HTTP status codes:</p>
+            <ul class="error-list">
+                <li><strong>400 Bad Request</strong>: Malformed request body or missing required parameters</li>
+                <li><strong>401 Unauthorized</strong>: Invalid or expired authentication credentials</li>
+                <li><strong>404 Not Found</strong>: Requested endpoint or resource doesn't exist</li>
+                <li><strong>429 Too Many Requests</strong>: Rate limit exceeded, retry with exponential backoff</li>
+                <li><strong>500 Internal Server Error</strong>: Temporary server issue, safe to retry</li>
+            </ul>
+        </div>
+
+        <!-- API REFERENCE -->
+        <div class="section" id="api">
+            <h2>API Reference</h2>
+
+            <div class="api-endpoint">
+                <div class="api-header">
+                    <span class="method">POST</span>
+                    <span class="url">/api/challenge</span>
                 </div>
-                <div class="code-box">
+                <p>Creates a new CAPTCHA challenge with cryptographically secure tokens and returns challenge data for
+                    client rendering.</p>
+            </div>
+
+            <div class="api-endpoint">
+                <div class="api-header">
+                    <span class="method">POST</span>
+                    <span class="url">/api/redeem</span>
+                </div>
+                <p>Validates user-submitted CAPTCHA solution and returns verification token for subsequent API calls.
+                </p>
+            </div>
+
+            <div class="api-endpoint">
+                <div class="api-header">
+                    <span class="method">POST</span>
+                    <span class="url">/api/validate</span>
+                </div>
+                <p>Validates previously issued tokens and optionally consumes them for one-time use scenarios.</p>
+            </div>
+        </div>
+
+        <!-- EVENTS -->
+        <div class="section">
+            <h2>Event Handling</h2>
+            <div class="demo-container">
+                <div class="demo-widget" style="background: var(--surface-overlay);">
+                    <div class="widget-wrapper branding-overlay">
+                        <cap-widget id="event-cap" data-cap-api-endpoint="/api/"></cap-widget>
+                    </div>
+                    <button class="btn ghost" style="margin-top:20px;"
+                        onclick="document.getElementById('event-cap').reset()">Reset Widget</button>
+                </div>
+                <div class="demo-code">
                     <div class="tabs">
                         <div class="tab-list">
-                            <button class="tab-btn active" onclick="setTab('dark', 0)">CSS</button>
-                            <button class="tab-btn" onclick="setTab('dark', 1)">HTML</button>
+                            <button class="tab-btn active" onclick="setTab('event', 0)">HTML</button>
+                            <button class="tab-btn" onclick="setTab('event', 1)">JavaScript</button>
+                            <button class="tab-btn" onclick="setTab('event', 2)">CSS</button>
                         </div>
                         <button class="copy-btn" onclick="copyCode(this)">Copy</button>
                     </div>
+
                     <div class="code-wrapper">
-                        <div id="dark-0" class="code-content active">
-<pre>.custom-dark {
+                        <div id="event-0" class="code-content active">
+                            <pre>&lt;<span class="t">cap-widget</span> <span class="a">id</span>=<span class="s">"event-cap"</span>&gt;&lt;/<span class="t">cap-widget</span>&gt;</pre>
+                        </div>
+
+                        <div id="event-1" class="code-content">
+                            <pre><span class="k">const</span> w = document.getElementById(<span class="s">"event-cap"</span>);
+
+w.addEventListener(<span class="s">"solve"</span>, <span class="k">e</span> => console.log(<span class="s">"Token:"</span>, e.detail));
+w.addEventListener(<span class="s">"error"</span>, <span class="k">e</span> => console.error(<span class="s">"Error:"</span>, e.detail));</pre>
+                        </div>
+                        <div id="event-2" class="code-content">
+                            <pre><span class="c">/* CSS for Branding Overlay */</span>
+<span class="k">.branding-overlay::before</span> { <span class="a">content</span>: <span class="s">"CFCap"</span>; ... }</pre>
+                        </div>
+                    </div>
+                    <div class="terminal" id="event-log"
+                        style="border-top: 1px solid var(--border-light); margin-top: auto; border-radius: 0; min-height: 100px;">
+                        <div>System Ready...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CUSTOMIZATION -->
+        <div class="section">
+            <h2>Customization</h2>
+            <div class="grid-2">
+                <!-- Dark Theme -->
+                <div class="custom-card">
+                    <h4>Dark Theme</h4>
+                    <div class="custom-preview preview-dark">
+                        <div class="widget-wrapper branding-overlay custom-dark">
+                            <cap-widget class="custom-dark" data-cap-api-endpoint="/api/"></cap-widget>
+                        </div>
+                    </div>
+                    <div class="code-box">
+                        <div class="tabs">
+                            <div class="tab-list">
+                                <button class="tab-btn active" onclick="setTab('dark', 0)">CSS</button>
+                                <button class="tab-btn" onclick="setTab('dark', 1)">HTML</button>
+                            </div>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <div class="code-wrapper">
+                            <div id="dark-0" class="code-content active">
+                                <pre>.custom-dark {
   --cap-background: #111;
   --cap-color: #fff;
   /* ... */
@@ -561,66 +1081,66 @@ w.addEventListener(<span class="s">"error"</span>, <span class="k">e</span> => c
   background: #111;
   color: #888;
 }</pre>
-                        </div>
-                        <div id="dark-1" class="code-content">
-<pre>&lt;<span class="t">cap-widget</span> <span class="a">class</span>=<span class="s">"custom-dark"</span>&gt;</pre>
+                            </div>
+                            <div id="dark-1" class="code-content">
+                                <pre>&lt;<span class="t">cap-widget</span> <span class="a">class</span>=<span class="s">"custom-dark"</span>&gt;</pre>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Hide Label -->
-            <div class="custom-card">
-                <h4>Hide Label</h4>
-                <div class="custom-preview">
-                    <div class="widget-wrapper">
-                        <cap-widget class="hide-label" data-cap-api-endpoint="/api/"></cap-widget>
-                    </div>
-                </div>
-                <div class="code-box">
-                    <div class="tabs">
-                        <div class="tab-list">
-                            <button class="tab-btn active" onclick="setTab('hide', 0)">CSS</button>
-                            <button class="tab-btn" onclick="setTab('hide', 1)">HTML</button>
+                <!-- Hide Label -->
+                <div class="custom-card">
+                    <h4>Hide Label</h4>
+                    <div class="custom-preview">
+                        <div class="widget-wrapper">
+                            <cap-widget class="hide-label" data-cap-api-endpoint="/api/"></cap-widget>
                         </div>
-                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
                     </div>
-                    <div class="code-wrapper">
-                        <div id="hide-0" class="code-content active">
-<pre>/* Hide Link */
-cap-widget a { display: none !important; }
+                    <div class="code-box">
+                        <div class="tabs">
+                            <div class="tab-list">
+                                <button class="tab-btn active" onclick="setTab('hide', 0)">CSS</button>
+                                <button class="tab-btn" onclick="setTab('hide', 1)">HTML</button>
+                            </div>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <div class="code-wrapper">
+                            <div id="hide-0" class="code-content active">
+                                <pre>/* Hide Link */
+cap-widget.hide-label::part(attribution) { display: none !important; }
 
 /* Hide "I'm a human" */
 cap-widget.hide-label {
   --cap-font-size: 0px;
 }</pre>
-                        </div>
-                        <div id="hide-1" class="code-content">
-<pre>&lt;<span class="t">cap-widget</span> <span class="a">class</span>=<span class="s">"hide-label"</span>&gt;</pre>
+                            </div>
+                            <div id="hide-1" class="code-content">
+                                <pre>&lt;<span class="t">cap-widget</span> <span class="a">class</span>=<span class="s">"hide-label"</span>&gt;</pre>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Kitchen Sink -->
-            <div class="custom-card">
-                <h4>Kitchen Sink</h4>
-                <div class="custom-preview preview-kitchen">
-                    <div class="widget-wrapper branding-overlay custom-kitchen">
-                        <cap-widget class="custom-kitchen" data-cap-api-endpoint="/api/"></cap-widget>
-                    </div>
-                </div>
-                <div class="code-box">
-                    <div class="tabs">
-                        <div class="tab-list">
-                            <button class="tab-btn active" onclick="setTab('sink', 0)">CSS</button>
-                            <button class="tab-btn" onclick="setTab('sink', 1)">HTML</button>
+                <!-- Kitchen Sink -->
+                <div class="custom-card">
+                    <h4>Kitchen Sink</h4>
+                    <div class="custom-preview preview-kitchen">
+                        <div class="widget-wrapper branding-overlay custom-kitchen">
+                            <cap-widget class="custom-kitchen" data-cap-api-endpoint="/api/"></cap-widget>
                         </div>
-                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
                     </div>
-                    <div class="code-wrapper">
-                        <div id="sink-0" class="code-content active">
-<pre>.kitchen {
+                    <div class="code-box">
+                        <div class="tabs">
+                            <div class="tab-list">
+                                <button class="tab-btn active" onclick="setTab('sink', 0)">CSS</button>
+                                <button class="tab-btn" onclick="setTab('sink', 1)">HTML</button>
+                            </div>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <div class="code-wrapper">
+                            <div id="sink-0" class="code-content active">
+                                <pre>.kitchen {
   --cap-border-radius: 0;
   --cap-color: #2cb67d;
   /* ... */
@@ -628,84 +1148,82 @@ cap-widget.hide-label {
 .custom-kitchen.branding-overlay::before {
   background: #1e1e24;
 }</pre>
-                        </div>
-                        <div id="sink-1" class="code-content">
-<pre>&lt;<span class="t">cap-widget</span> <span class="a">class</span>=<span class="s">"kitchen"</span>&gt;</pre>
+                            </div>
+                            <div id="sink-1" class="code-content">
+                                <pre>&lt;<span class="t">cap-widget</span> <span class="a">class</span>=<span class="s">"kitchen"</span>&gt;</pre>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            
-            <!-- Internationalization (i18n) -->
-            <div class="custom-card">
-                <h4>Full Localization</h4>
-                <div class="custom-preview">
-                    <div class="widget-wrapper branding-overlay">
-                        <cap-widget 
-                            data-cap-api-endpoint="/api/"
-                            data-cap-i18n-initial-state="Cliquez ici"
-                            data-cap-i18n-verifying-label="Vérification..."
-                            data-cap-i18n-solved-label="Vous êtes humain"
-                            data-cap-i18n-error-label="Erreur">
-                        </cap-widget>
-                    </div>
-                </div>
-                <div class="code-box">
-                    <div class="tabs">
-                        <div class="tab-list">
-                            <button class="tab-btn active" onclick="setTab('i18n', 0)">HTML</button>
-                            <button class="tab-btn" onclick="setTab('i18n', 1)">JavaScript</button>
-                            <button class="tab-btn" onclick="setTab('i18n', 2)">CSS</button>
+
+                <!-- Internationalization (i18n) -->
+                <div class="custom-card">
+                    <h4>Full Localization</h4>
+                    <div class="custom-preview">
+                        <div class="widget-wrapper branding-overlay">
+                            <cap-widget data-cap-api-endpoint="/api/" data-cap-i18n-initial-state="Cliquez ici"
+                                data-cap-i18n-verifying-label="Vérification..."
+                                data-cap-i18n-solved-label="Vous êtes humain" data-cap-i18n-error-label="Erreur">
+                            </cap-widget>
                         </div>
-                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
                     </div>
-                    <div class="code-wrapper">
-                        <div id="i18n-0" class="code-content active">
-<pre>&lt;<span class="t">script</span> <span class="a">src</span>=<span class="s">"/widget.js"</span> <span class="a">type</span>=<span class="s">"module"</span>&gt;&lt;/<span class="t">script</span>&gt;
+                    <div class="code-box">
+                        <div class="tabs">
+                            <div class="tab-list">
+                                <button class="tab-btn active" onclick="setTab('i18n', 0)">HTML</button>
+                                <button class="tab-btn" onclick="setTab('i18n', 1)">JavaScript</button>
+                                <button class="tab-btn" onclick="setTab('i18n', 2)">CSS</button>
+                            </div>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <div class="code-wrapper">
+                            <div id="i18n-0" class="code-content active">
+                                <pre>&lt;<span class="t">script</span> <span class="a">src</span>=<span class="s">"/widget.js"</span> <span class="a">type</span>=<span class="s">"module"</span>&gt;&lt;/<span class="t">script</span>&gt;
 
 &lt;<span class="t">cap-widget</span>
   <span class="a">data-cap-i18n-initial-state</span>=<span class="s">"Cliquez ici"</span>
   <span class="a">data-cap-i18n-verifying-label</span>=<span class="s">"Vérification..."</span>
   <span class="a">data-cap-i18n-solved-label</span>=<span class="s">"Vous êtes humain"</span>&gt;
 &lt;/<span class="t">cap-widget</span>&gt;</pre>
-                        </div>
-                        <div id="i18n-1" class="code-content">
-<pre><span class="c">/* No JS needed */</span></pre>
-                        </div>
-                        <div id="i18n-2" class="code-content">
-<pre><span class="c">/* Standard Branding CSS */</span>
+                            </div>
+                            <div id="i18n-1" class="code-content">
+                                <pre><span class="c">/* No JS needed */</span></pre>
+                            </div>
+                            <div id="i18n-2" class="code-content">
+                                <pre><span class="c">/* Standard Branding CSS */</span>
 <span class="k">cap-widget a</span> { <span class="a">display</span>: <span class="s">none !important</span>; }
 <span class="k">.branding-overlay::before</span> { <span class="a">content</span>: <span class="s">"CFCap"</span>; ... }</pre>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- 4. FLOATING -->
-    <div class="section">
-        <h2>Floating Mode</h2>
-        <div class="grid-2">
-            <!-- Bottom -->
-            <div class="custom-card">
-                 <!-- FIX 4: Header above code -->
-                <div class="float-header">
-                    <h4>Bottom (Local)</h4>
-                    <button class="btn primary float-btn" data-cap-floating="#float-bot" data-cap-floating-position="bottom">Trigger</button>
-                </div>
-                <div class="code-box">
-                    <div class="tabs">
-                        <div class="tab-list">
-                            <button class="tab-btn active" onclick="setTab('float1', 0)">HTML</button>
-                            <button class="tab-btn" onclick="setTab('float1', 1)">JavaScript</button>
-                            <button class="tab-btn" onclick="setTab('float1', 2)">CSS</button>
-                        </div>
-                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <!-- 4. FLOATING -->
+        <div class="section">
+            <h2>Floating Mode</h2>
+            <div class="grid-2">
+                <!-- Bottom -->
+                <div class="custom-card">
+                    <!-- FIX 4: Header above code -->
+                    <div class="float-header">
+                        <h4>Bottom (Local)</h4>
+                        <button class="btn primary float-btn" data-cap-floating="#float-bot"
+                            data-cap-floating-position="bottom">Trigger</button>
                     </div>
-                    <div class="code-wrapper">
-                        <div id="float1-0" class="code-content active">
-<pre><span class="c">&lt;!-- Local --&gt;</span>
+                    <div class="code-box">
+                        <div class="tabs">
+                            <div class="tab-list">
+                                <button class="tab-btn active" onclick="setTab('float1', 0)">HTML</button>
+                                <button class="tab-btn" onclick="setTab('float1', 1)">JavaScript</button>
+                                <button class="tab-btn" onclick="setTab('float1', 2)">CSS</button>
+                            </div>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <div class="code-wrapper">
+                            <div id="float1-0" class="code-content active">
+                                <pre><span class="c">&lt;!-- Local --&gt;</span>
 &lt;<span class="t">script</span> <span class="a">src</span>=<span class="s">"/widget/widget.js"</span> <span class="a">type</span>=<span class="s">"module"</span>&gt;&lt;/<span class="t">script</span>&gt;
 &lt;<span class="t">script</span> <span class="a">src</span>=<span class="s">"/widget/cap-floating.min.js"</span>&gt;&lt;/<span class="t">script</span>&gt;
 
@@ -713,36 +1231,37 @@ cap-widget.hide-label {
         <span class="a">data-cap-floating-position</span>=<span class="s">"bottom"</span>&gt;
   Bottom
 &lt;/<span class="t">button</span>&gt;</pre>
-                        </div>
-                        <div id="float1-1" class="code-content">
-<pre><span class="c">// No JS needed for trigger, handled by library</span></pre>
-                        </div>
-                         <div id="float1-2" class="code-content">
-<pre><span class="c">/* Standard CSS */</span></pre>
+                            </div>
+                            <div id="float1-1" class="code-content">
+                                <pre><span class="c">// No JS needed for trigger, handled by library</span></pre>
+                            </div>
+                            <div id="float1-2" class="code-content">
+                                <pre><span class="c">/* Standard CSS */</span></pre>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            
-            <!-- Top -->
-            <div class="custom-card">
-                <!-- FIX 4: Header above code -->
-                <div class="float-header">
-                    <h4>Top (CDN)</h4>
-                    <button class="btn primary float-btn" data-cap-floating="#float-top" data-cap-floating-position="top">Trigger</button>
-                </div>
-                <div class="code-box">
-                    <div class="tabs">
-                        <div class="tab-list">
-                            <button class="tab-btn active" onclick="setTab('float2', 0)">HTML</button>
-                            <button class="tab-btn" onclick="setTab('float2', 1)">JavaScript</button>
-                            <button class="tab-btn" onclick="setTab('float2', 2)">CSS</button>
-                        </div>
-                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+
+                <!-- Top -->
+                <div class="custom-card">
+                    <!-- FIX 4: Header above code -->
+                    <div class="float-header">
+                        <h4>Top (CDN)</h4>
+                        <button class="btn primary float-btn" data-cap-floating="#float-top"
+                            data-cap-floating-position="top">Trigger</button>
                     </div>
-                    <div class="code-wrapper">
-                        <div id="float2-0" class="code-content active">
-<pre><span class="c">&lt;!-- CDN --&gt;</span>
+                    <div class="code-box">
+                        <div class="tabs">
+                            <div class="tab-list">
+                                <button class="tab-btn active" onclick="setTab('float2', 0)">HTML</button>
+                                <button class="tab-btn" onclick="setTab('float2', 1)">JavaScript</button>
+                                <button class="tab-btn" onclick="setTab('float2', 2)">CSS</button>
+                            </div>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <div class="code-wrapper">
+                            <div id="float2-0" class="code-content active">
+                                <pre><span class="c">&lt;!-- CDN --&gt;</span>
 &lt;<span class="t">script</span> <span class="a">src</span>=<span class="s">"https://cdn.jsdelivr.net/npm/@cap.js/widget@0.1.33/dist/widget.js"</span> <span class="a">type</span>=<span class="s">"module"</span>&gt;&lt;/<span class="t">script</span>&gt;
 &lt;<span class="t">script</span> <span class="a">src</span>=<span class="s">"https://cdn.jsdelivr.net/npm/@cap.js/widget@0.1.33/cap-floating.min.js"</span>&gt;&lt;/<span class="t">script</span>&gt;
 
@@ -750,93 +1269,96 @@ cap-widget.hide-label {
         <span class="a">data-cap-floating-position</span>=<span class="s">"top"</span>&gt;
   Top
 &lt;/<span class="t">button</span>&gt;</pre>
-                        </div>
-                         <div id="float2-1" class="code-content">
-<pre><span class="c">// No JS needed for trigger, handled by library</span></pre>
-                        </div>
-                        <div id="float2-2" class="code-content">
-<pre><span class="c">/* Standard CSS */</span></pre>
+                            </div>
+                            <div id="float2-1" class="code-content">
+                                <pre><span class="c">// No JS needed for trigger, handled by library</span></pre>
+                            </div>
+                            <div id="float2-2" class="code-content">
+                                <pre><span class="c">/* Standard CSS */</span></pre>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <!-- Hidden Widgets -->
+            <cap-widget id="float-bot" style="display:none" data-cap-api-endpoint="/api/"
+                onsolve="showToast('Bottom Solved')"></cap-widget>
+            <cap-widget id="float-top" style="display:none" data-cap-api-endpoint="/api/"
+                onsolve="showToast('Top Solved')"></cap-widget>
         </div>
 
-        <!-- Hidden Widgets -->
-        <cap-widget id="float-bot" style="display:none" data-cap-api-endpoint="/api/" onsolve="showToast('Bottom Solved')"></cap-widget>
-        <cap-widget id="float-top" style="display:none" data-cap-api-endpoint="/api/" onsolve="showToast('Top Solved')"></cap-widget>
     </div>
 
-</div>
+    <footer class="footer">
+        Powered by Cloudflare Worker & @cap.js/server
+    </footer>
 
-<footer class="footer">
-    Powered by Cloudflare Worker & @cap.js/server
-</footer>
+    <script>
+        // Theme
+        const toggle = document.getElementById('themeToggle');
+        const sun = document.querySelector('.sun');
+        const moon = document.querySelector('.moon');
 
-<script>
-    // Theme
-    const toggle = document.getElementById('themeToggle');
-    const sun = document.querySelector('.sun');
-    const moon = document.querySelector('.moon');
+        function setTheme(t) {
+            document.body.setAttribute('data-theme', t);
+            localStorage.setItem('theme', t);
+            if (t === 'dark') { sun.style.display = 'none'; moon.style.display = 'block'; }
+            else { sun.style.display = 'block'; moon.style.display = 'none'; }
+        }
+        setTheme(localStorage.getItem('theme') || 'light');
+        toggle.onclick = () => setTheme(document.body.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
 
-    function setTheme(t) {
-        document.body.setAttribute('data-theme', t);
-        localStorage.setItem('theme', t);
-        if(t==='dark') { sun.style.display='none'; moon.style.display='block'; }
-        else { sun.style.display='block'; moon.style.display='none'; }
-    }
-    setTheme(localStorage.getItem('theme') || 'light');
-    toggle.onclick = () => setTheme(document.body.getAttribute('data-theme')==='light'?'dark':'light');
-
-    // Tabs
-    window.setTab = (group, idx) => {
-        const container = document.getElementById(group + '-0').parentElement.parentElement;
-        const buttons = container.querySelectorAll('.tab-btn');
-        const contents = container.querySelectorAll('.code-content');
-        buttons.forEach((b, i) => b.classList.toggle('active', i === idx));
-        contents.forEach((c, i) => c.classList.toggle('active', i === idx));
-    };
-
-    // Copy Code
-    window.copyCode = (btn) => {
-        const code = btn.parentElement.parentElement.querySelector('.code-content.active pre').innerText;
-        navigator.clipboard.writeText(code);
-        const original = btn.innerText;
-        btn.innerText = "Copied!";
-        setTimeout(() => btn.innerText = original, 2000);
-    };
-
-    // Logic
-    const main = document.getElementById('main-cap');
-    if(main) main.addEventListener('solve', (e) => {
-        const d = document.getElementById('demo-status');
-        d.innerText = "✅ Verified";
-        d.style.color = "var(--success-color)";
-        d.style.borderColor = "var(--success-color)";
-        document.getElementById('main-wrapper').classList.add('solved');
-    });
-
-    const evt = document.getElementById('event-cap');
-    const logBox = document.getElementById('event-log');
-    if(evt) {
-        const log = (m) => {
-            const d = document.createElement('div');
-            d.innerText = `> ${m}`;
-            logBox.prepend(d);
+        // Tabs
+        window.setTab = (group, idx) => {
+            const container = document.getElementById(group + '-0').parentElement.parentElement;
+            const buttons = container.querySelectorAll('.tab-btn');
+            const contents = container.querySelectorAll('.code-content');
+            buttons.forEach((b, i) => b.classList.toggle('active', i === idx));
+            contents.forEach((c, i) => c.classList.toggle('active', i === idx));
         };
-        evt.addEventListener('solve', (e) => log(`SOLVE: ${e.detail.token}`));
-        evt.addEventListener('error', (e) => log(`ERROR: ${JSON.stringify(e.detail)}`));
-        evt.addEventListener('reset', () => log('RESET'));
-        evt.addEventListener('progress', () => log('PROGRESS...'));
-    }
 
-    // Toast
-    window.showToast = (msg) => {
-        const t = document.getElementById('toast');
-        t.innerText = msg;
-        t.classList.add('show');
-        setTimeout(() => t.classList.remove('show'), 3000);
-    }
-</script>
+        // Copy Code
+        window.copyCode = (btn) => {
+            const code = btn.parentElement.parentElement.querySelector('.code-content.active pre').innerText;
+            navigator.clipboard.writeText(code);
+            const original = btn.innerText;
+            btn.innerText = "Copied!";
+            setTimeout(() => btn.innerText = original, 2000);
+        };
+
+        // Logic
+        const main = document.getElementById('main-cap');
+        if (main) main.addEventListener('solve', (e) => {
+            const d = document.getElementById('demo-status');
+            d.innerText = "✅ Verified";
+            d.style.color = "var(--success-color)";
+            d.style.borderColor = "var(--success-color)";
+            document.getElementById('main-wrapper').classList.add('solved');
+        });
+
+        const evt = document.getElementById('event-cap');
+        const logBox = document.getElementById('event-log');
+        if (evt) {
+            const log = (m) => {
+                const d = document.createElement('div');
+                d.innerText = `> ${m}`;
+                logBox.prepend(d);
+            };
+            evt.addEventListener('solve', (e) => log(`SOLVE: ${e.detail.token}`));
+            evt.addEventListener('error', (e) => log(`ERROR: ${JSON.stringify(e.detail)}`));
+            evt.addEventListener('reset', () => log('RESET'));
+            evt.addEventListener('progress', () => log('PROGRESS...'));
+        }
+
+        // Toast
+        window.showToast = (msg) => {
+            const t = document.getElementById('toast');
+            t.innerText = msg;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3000);
+        }
+    </script>
 </body>
+
 </html>
